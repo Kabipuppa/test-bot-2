@@ -1,3 +1,4 @@
+//проверка
 require('dotenv').config();
 //Подключаем библиотеку для работы с Телеграм ботом в js
 const { Telegraf } = require('telegraf');
