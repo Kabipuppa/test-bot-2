@@ -11,45 +11,17 @@ const {TELEGRAM_BOT_TOKEN} = process.env
 //Создаем бота Телеграм
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
 
-// inline keyboard
-const keyboard = () => {
-  return Telegraf.Extra
-    .markup((m) =>
-      m.inlineKeyboard([
-        [
-          m.callbackButton('Алтайский муниципальный район', '95605000'),
-        ],
-        [
-          m.callbackButton('Аскизский муниципальный район', '95608000'),
-        ],
-        [
-          m.callbackButton('Бейский муниципальный район', '95612000'),
-        ],
-      ])
-    )
-};
-
-//При команде /start отвечает 'Hello'
-bot.start((ctx) => ctx.reply('hello!'));
-
-// слушаем
-bot
-  .on('message', (ctx) => {
-    ctx.reply("Выберите действие.", keyboard());
-  })
-  .on('callback_query', (ctx) => {
-    // отвечаем телеграму что получили от него запрос
-    ctx.answerCbQuery();
-    // удаляем сообщение
-    ctx.deleteMessage();
-    // отвечаем на нажатие кнопки
-    ctx.reply('You press ',ctx.callbackQuery.data, keyboard())
-  });
+//команда start
+bot.start((ctx) =>{
+  //Вывод "hello"
+  ctx.reply('hello');
+})
 
 //Post запрос
 const search = async () => {
   try{
-    const response = await axios.post('https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search', {
+    url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'
+    const response = await axios.post(url, {
       allOktmoLevels: false,
       elementsPerPage: 10,
       fetchAnnulled: false,
@@ -63,8 +35,13 @@ const search = async () => {
       tariffEntityType: "public_standarts",
       types: ["REGIONAL", "MUNICIPAL"],
     });
+    // return util.inspect(searchDataArr.filter(item => item.familiesNumber.number === 5), null, 2);
+    //Массив 'search'
+    searchDataArr = response.data.items
+    filterSearchDataArr = searchDataArr.filter(item => item.familiesNumber.number === 5);
 
-    return util.inspect(response.data.items.filter(item => item.familiesNumber.number === 5), null, 2);
+    return (filterSearchDataArr);
+
   } catch (e){
     console.error(e);
   }
