@@ -17,6 +17,53 @@ bot.start((ctx) =>{
   ctx.reply('hello');
 })
 
+//команда subsidy
+bot.command('subsidy', (ctx)=>{
+  //Вывод "subsidy its true"
+  ctx.reply('subsidy its true',
+  {
+      reply_markup:{
+          inline_keyboard: [
+              [{text:'Муниципальный район', callback_data:'mn'}],
+              [{text:'Городской округ', callback_data:'gr'}],  
+              [{text:'Запрос к ГИС ЖКХ', callback_data:'gis-response'}],
+          ]
+      }
+  });
+});
+
+//обработка выбранной кнопки 'Муниципальный район'
+bot.action('mn', (ctx) =>{
+  ctx.deleteMessage();
+  ctx.reply('Вы выбрали Муниципальный район',
+  {
+      reply_markup:{
+          inline_keyboard: [
+              [{text:'Назад', callback_data:'go-back'}],
+              [{text:'Алтайский муниципальный район', callback_data:'al'}],
+              [{text:'Аскизский муниципальный район', callback_data:'as'}], 
+              [{text:'Бейский муниципальный район', callback_data:'be'}],   
+              [{text:'Боградский муниципальный район', callback_data:'bo'}], 
+          ]
+      }
+  });
+})
+
+//обработка выбранной кнопки 'Назад'
+bot.action('go-back', (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply('subsidy its true',
+  {
+      reply_markup:{
+          inline_keyboard: [
+              [{text:'Муниципальный район', callback_data:'mn'}],
+              [{text:'Городской округ', callback_data:'gr'}],  
+              [{text:'Запрос к ГИС ЖКХ', callback_data:'gis-response'}],
+          ]
+      }
+  });
+})
+
 //Post запрос
 const search = async () => {
  
@@ -62,4 +109,4 @@ const writeResult = async () => {
 }
 
 // Вызов writeResult
-writeResult();
+// writeResult()
