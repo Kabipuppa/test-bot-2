@@ -19,6 +19,7 @@ bot.start((ctx) =>{
 
 //Post запрос
 const search = async () => {
+ 
   try{
     url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'
     const response = await axios.post(url, {
@@ -35,10 +36,13 @@ const search = async () => {
       tariffEntityType: "public_standarts",
       types: ["REGIONAL", "MUNICIPAL"],
     });
-    // return util.inspect(searchDataArr.filter(item => item.familiesNumber.number === 5), null, 2);
+
+
+    // return util.inspect(searchDataArr.filter(item => item.familiesNumber.number === 4), null, 2);
     //Массив 'search'
     searchDataArr = response.data.items
-    filterSearchDataArr = searchDataArr.filter(item => item.familiesNumber.number === 5);
+    filterSearchDataArr = searchDataArr.filter(item=> item.familiesNumber.number === 2);
+    // dataArr = filterSearchDataArr.map(el => ({...el, rates: el.rates.map(r => r.diffCriteria )}));
 
     return (filterSearchDataArr);
 
