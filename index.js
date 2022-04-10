@@ -1,15 +1,17 @@
-//проверка первый коммит
+//Подключаем библиотеку для чтения переменных из файла .env (Токен, ГИС ЖКХ)
 require('dotenv').config();
+//хз
+const path = require('path');
 //Подключаем библиотеку для работы с Телеграм ботом в js
 const { Telegraf } = require('telegraf');
-//Подключаем библиотеку для работы с http js
+//Подключаем библиотеку для работы с ссылками http js (API ГИС ЖКХ)
 const axios = require('axios');
-//Подключаем модуль Node.JS util.inspect() для красивого вывода
+//Подключаем модуль Node.JS util.inspect() для красивого вывода json-массива
 const util = require('util');
 //Подключаем токен
 const {TELEGRAM_BOT_TOKEN} = process.env
 //Создаем бота Телеграм
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN);
+const bot = new Telegraf(process.env.BOT_TOKEN);
 
 //команда start
 bot.start((ctx) =>{
@@ -97,7 +99,7 @@ bot.action('go-back', (ctx) => {
 const search = async (code) => {
  
   try{
-    url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'
+    url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'// API ссылка
     const response = await axios.post(url, {
       allOktmoLevels: false,
       elementsPerPage: 21, // Страницы сколько показать
@@ -117,7 +119,7 @@ const search = async (code) => {
     // return util.inspect(searchDataArr.filter(item => item.familiesNumber.number === 4), null, 2);
     //Массив 'search' отфильтрованный
     searchDataArr = response.data.items
-    filterSearchDataArr = searchDataArr.filter(item=> item.seasonalityType.name === "В отопительный период" && item.familiesNumber.number === 1);
+    filterSearchDataArr = searchDataArr.filter(item=> item.seasonalityType.name === "В отопительный период" && item.familiesNumber.number === 5);
     cases = filterSearchDataArr[0];
 
     // dataArr = filterSearchDataArr.map(el => ({...el, rates: el.rates.map(r => r.diffCriteria )}));
@@ -132,9 +134,12 @@ const search = async (code) => {
 Object.keys(city_id).forEach(city => {
   bot.action(city, async ctx =>{
     const data = await search(city_id[city])
-    console.log(data.rates);
+    get_data = data.rates[0];
+    calc = get_data.value + 1000;
+    console.log(calc);
   })
 })
+
 
 //Запуск бота
 bot.launch();
