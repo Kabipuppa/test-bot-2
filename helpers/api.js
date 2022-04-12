@@ -20,7 +20,11 @@ const search = async (code) => {
       });
   
       searchDataArr = response.data.items
-      filterSearchDataArr = searchDataArr.filter(item=> item.seasonalityType.name === "В отопительный период" && item.familiesNumber.number === 5);
+      filterSearchDataArr = searchDataArr.filter(
+          item=> item.seasonalityType.name === "В отопительный период"
+            &&
+          item.familiesNumber.number === 5
+        );
       cases = filterSearchDataArr[0];
   
       return (cases);
