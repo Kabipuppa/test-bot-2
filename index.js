@@ -1,8 +1,8 @@
 require('dotenv').config();
 const { Telegraf } = require('telegraf');
-const axios = require('axios');
 const util = require('util');
-const { search } = require('../helpers/api');
+const { search } = require('./helpers/api');
+const {main_menu, municipal_area, city_area} = require('./helpers/keyboards');
 const {TELEGRAM_BOT_TOKEN} = process.env
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -14,36 +14,13 @@ bot.start((ctx) =>{
 
 //команда subsidy
 bot.command('subsidy', (ctx)=>{
-  ctx.reply('Выберите муниципальный район или городской округ:',
-  {
-      reply_markup:{
-          inline_keyboard: [
-              [{text:'Муниципальный район', callback_data:'mn'}],
-              [{text:'Городской округ', callback_data:'gr'}],  
-          ]
-      }
-  });
+  ctx.reply('Выберите муниципальный район или городской округ:', main_menu);
 });
 
 //обработка выбранной кнопки 'Муниципальный район'
 bot.action('mn', (ctx) =>{
   ctx.deleteMessage();
-  ctx.reply('Выберите муниципальный район:',
-  {
-      reply_markup:{
-          inline_keyboard: [
-              [{text:'Назад в меню', callback_data:'go-back'}],
-              [{text:'Алтайский муниципальный район', callback_data:'al'}],
-              [{text:'Аскизский муниципальный район', callback_data:'as'}], 
-              [{text:'Бейский муниципальный район', callback_data:'be'}],   
-              [{text:'Боградский муниципальный район', callback_data:'bo'}],
-              [{text:'Орджоникидзевский муниципальный район', callback_data:'or'}],
-              [{text:'Таштыпский муниципальный район', callback_data:'ta'}],
-              [{text:'Усть-Абаканский муниципальный район', callback_data:'ya'}],
-              [{text:'Ширинский муниципальный район', callback_data:'sr'}],
-          ]
-      }
-  });
+  ctx.reply('Выберите муниципальный район:', municipal_area);
 })
 
 const city_id = {
@@ -57,33 +34,13 @@ const city_id = {
 //обработка выбранной кнопки 'Городской округ'
 bot.action('gr', (ctx) =>{
   ctx.deleteMessage();
-  ctx.reply('Выберите городской округ:',
-  {
-      reply_markup:{
-          inline_keyboard: [
-              [{text:'Назад в меню', callback_data:'go-back'}],
-              [{text:'город Абакан', callback_data:'Abakan'}],
-              [{text:'город Абаза', callback_data:'Abaza'}],
-              [{text:'город Саяногорск', callback_data:'Sayanogorsk'}], 
-              [{text:'город Сорск', callback_data:'Sorsk'}],
-              [{text:'город Черногорск', callback_data:'Chernogorsk'}],
-          ]
-      }
-  });
+  ctx.reply('Выберите городской округ:', city_area);
 })
 
 //обработка выбранной кнопки 'Назад'
 bot.action('go-back', (ctx) => {
   ctx.deleteMessage();
-  ctx.reply('subsidy its true',
-  {
-      reply_markup:{
-          inline_keyboard: [
-              [{text:'Муниципальный район', callback_data:'mn'}],
-              [{text:'Городской округ', callback_data:'gr'}],  
-          ]
-      }
-  });
+  ctx.reply('Выберите муниципальный район или городской округ:', main_menu);
 })
 
 // тут был post запрос к api

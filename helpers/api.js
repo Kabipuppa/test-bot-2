@@ -1,3 +1,4 @@
+const axios = require('axios');
 //Post запрос
 const search = async (code) => {
  
