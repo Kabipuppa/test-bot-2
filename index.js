@@ -3,24 +3,31 @@ const { Telegraf } = require('telegraf');
 const util = require('util');
 const { search } = require('./helpers/api');
 const {main_menu, municipal_area, city_area} = require('./helpers/keyboards');
+const {
+  greeting,
+  use_subsidy,
+  select_municipal_or_city,
+  select_municipal,
+  select_city,
+} = require('./helpers/msg');
 const {TELEGRAM_BOT_TOKEN} = process.env
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 //команда start
 bot.start((ctx) =>{
-  ctx.reply('Здравствуйте! 🙂 Вас приветствует чат-бот "Калькулятор субсидии".  Данный расчет носит информативный характер. По вопросам окончательного решения необходимо обратиться в управление социальной поддержки населения по месту жительства.');
-  ctx.reply('Для начала опроса используйте команду /subsidy.');
+  ctx.reply(greeting);
+  ctx.reply(use_subsidy);
 })
 
 //команда subsidy
 bot.command('subsidy', (ctx)=>{
-  ctx.reply('Выберите муниципальный район или городской округ:', main_menu);
+  ctx.reply(select_municipal_or_city, main_menu);
 });
 
 //обработка выбранной кнопки 'Муниципальный район'
 bot.action('mn', (ctx) =>{
   ctx.deleteMessage();
-  ctx.reply('Выберите муниципальный район:', municipal_area);
+  ctx.reply(select_municipal, municipal_area);
 })
 
 const city_id = {
@@ -34,13 +41,13 @@ const city_id = {
 //обработка выбранной кнопки 'Городской округ'
 bot.action('gr', (ctx) =>{
   ctx.deleteMessage();
-  ctx.reply('Выберите городской округ:', city_area);
+  ctx.reply(  select_city, city_area);
 })
 
 //обработка выбранной кнопки 'Назад'
 bot.action('go-back', (ctx) => {
   ctx.deleteMessage();
-  ctx.reply('Выберите муниципальный район или городской округ:', main_menu);
+  ctx.reply(select_municipal_or_city, main_menu);
 })
 
 // тут был post запрос к api
