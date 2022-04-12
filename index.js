@@ -1,28 +1,19 @@
-//Подключаем библиотеку для чтения переменных из файла .env (Токен, ГИС ЖКХ)
 require('dotenv').config();
-//хз
-const path = require('path');
-//Подключаем библиотеку для работы с Телеграм ботом в js
 const { Telegraf } = require('telegraf');
-//Подключаем библиотеку для работы с ссылками http js (API ГИС ЖКХ)
 const axios = require('axios');
-//Подключаем модуль Node.JS util.inspect() для красивого вывода json-массива
 const util = require('util');
-//Подключаем токен
+const { search } = require('../helpers/api');
 const {TELEGRAM_BOT_TOKEN} = process.env
-//Создаем бота Телеграм
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 //команда start
 bot.start((ctx) =>{
-  //Вывод "hello"
   ctx.reply('Здравствуйте! 🙂 Вас приветствует чат-бот "Калькулятор субсидии".  Данный расчет носит информативный характер. По вопросам окончательного решения необходимо обратиться в управление социальной поддержки населения по месту жительства.');
   ctx.reply('Для начала опроса используйте команду /subsidy.');
 })
 
 //команда subsidy
 bot.command('subsidy', (ctx)=>{
-  //Вывод "subsidy its true"
   ctx.reply('Выберите муниципальный район или городской округ:',
   {
       reply_markup:{
@@ -95,41 +86,7 @@ bot.action('go-back', (ctx) => {
   });
 })
 
-//Post запрос
-const search = async (code) => {
- 
-  try{
-    url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'// API ссылка
-    const response = await axios.post(url, {
-      allOktmoLevels: false,
-      elementsPerPage: 21, // Страницы сколько показать
-      fetchAnnulled: false,
-      kinds: [
-        "COST"
-      ],
-      oktmoCodes: [
-        code
-      ],
-      pageIndex: 1,
-      tariffEntityType: "public_standarts",
-      types: ["REGIONAL", "MUNICIPAL"],
-    });
-
-
-    // return util.inspect(searchDataArr.filter(item => item.familiesNumber.number === 4), null, 2);
-    //Массив 'search' отфильтрованный
-    searchDataArr = response.data.items
-    filterSearchDataArr = searchDataArr.filter(item=> item.seasonalityType.name === "В отопительный период" && item.familiesNumber.number === 5);
-    cases = filterSearchDataArr[0];
-
-    // dataArr = filterSearchDataArr.map(el => ({...el, rates: el.rates.map(r => r.diffCriteria )}));
-
-    return (cases);
-
-  } catch (e){
-    console.error(e);
-  }
-};
+// тут был post запрос к api
 
 Object.keys(city_id).forEach(city => {
   bot.action(city, async ctx =>{
@@ -143,13 +100,3 @@ Object.keys(city_id).forEach(city => {
 
 //Запуск бота
 bot.launch();
-
-// Вывести result
-// const writeResult = async () => {
-//   const result = await search();
-  
-//   console.log(result);
-// }
-
-// Вызов writeResult
-// writeResult()
