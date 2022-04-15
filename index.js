@@ -28,7 +28,6 @@ let selected_city = {};
 let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
-let standard_id = {};
 
 bot.start((ctx) =>{
   ctx.reply(greeting);
@@ -60,17 +59,26 @@ const season_id = {
   cold_period: 'Вне отопительного периода',
 }
 
+const standard_id = {
+  a: 0,
+  b: 1,
+  c: 2,
+  d: 3,
+  e: 4,
+  f: 5,
+}
+
 //обработка выбранной кнопки 'Назад'
 bot.action('go-back', (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_municipal_or_city, main_menu);
 })
 
-//обработка выбранной кнопки 'Муниципальный район'
-bot.action('mn', (ctx) =>{
-  ctx.deleteMessage();
-  ctx.reply(select_municipal, municipal_area);
-})
+// //обработка выбранной кнопки 'Муниципальный район'
+// bot.action('mn', (ctx) =>{
+//   ctx.deleteMessage();
+//   ctx.reply(select_municipal, municipal_area);
+// })
 
 //обработка выбранной кнопки 'Городской округ'
 bot.action('gr', (ctx) =>{
@@ -100,33 +108,11 @@ Object.keys(people_id).forEach(people => {
   })
 })
 
-// условие
-if (selected_people === 1) {
-  standard_id = {
-    one: 0,
-    two: 1,
-    three: 2,
-    four: 3,
-    five: 4,
-    six: 5,
-  }
-  // обработка выбранной кнопки 'Период'
-  bot.action('next_season', (ctx)=>{
-    ctx.deleteMessage();
-    ctx.reply(select_season, num_season_1);
-  });
-} else {
-  standard_id = {
-    one: 0,
-    two: 1,
-    three: 2,
-  }
-  // обработка выбранной кнопки 'Период'
-  bot.action('next_season', (ctx)=>{
-    ctx.deleteMessage();
-    ctx.reply(select_season, num_season);
-  });
-}
+// обработка выбранной кнопки 'Период_1'
+bot.action('next_season_1', (ctx)=>{
+  ctx.deleteMessage();
+  ctx.reply(select_season, num_season_1);
+});
 
 // запомнить значение 'Период'
 Object.keys(season_id).forEach(season => {
@@ -136,13 +122,7 @@ Object.keys(season_id).forEach(season => {
   })
 })
 
-//обработка выбранной кнопки 'выбрать страндарт'
-bot.action('select_standard', (ctx) => {
-  ctx.deleteMessage();
-  ctx.reply(select_standard, num_standard);
-})
-
-//обработка выбранной кнопки 'выбрать страндарт_1'
+// обработка выбранной кнопки 'Стандарт_1"
 bot.action('select_standard_1', (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_standard, num_standard_1);
@@ -159,9 +139,9 @@ Object.keys(standard_id).forEach(standard => {
 // кнопка отправить POST
 bot.action('post', async ctx =>{
   const data = await search(selected_city, selected_people, selected_season)
-  // get_data = data.rates[selected_standard];
+  get_data = data.rates[selected_standard];
   // calc = get_data.value + 1000;
-  console.log(selected_standard);
+  console.log(get_data.value);
 })
 
 bot.launch();
