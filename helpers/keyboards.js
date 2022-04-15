@@ -57,19 +57,81 @@ const num_season = {
             [{text:'Назад в меню' , callback_data:'go-back'}],
             [{text:'В отопительный период', callback_data:'hot_period'},
             {text:'Вне отопительного периода', callback_data:'cold_period'}],
+            [{text:'Выбрать стандарт', callback_data:'select_standard'}],
+        ]
+    }
+}
+
+const num_season_1 = {
+    reply_markup:{
+        inline_keyboard: [
+            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{text:'В отопительный период', callback_data:'hot_period'},
+            {text:'Вне отопительного периода', callback_data:'cold_period'}],
+            [{text:'Выбрать стандарт', callback_data:'select_standard_1'}],
+        ]
+    }
+}
+
+const num_standard = {
+    reply_markup:{
+        inline_keyboard: [
+            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{
+                text:'При оплате коммунальных услуг из расчета 12 месяцев календарного года',
+                callback_data:'one'
+            }],
+            [{
+                text:'При оплате коммунальных услуг за жилые помещения с печным отоплением',
+                callback_data:'two'
+            }],
+            [{
+                text:'При оплате коммунальных услуг с учетом продолжительности отопительного периода',
+                callback_data:'three'
+            }],
             [{text:'Отправить POST запрос', callback_data:'post'}],
         ]
     }
 }
 
-// const num_standard = {
-//     reply_markup:{
-//         inline_keyboard: [
-//             [{text:'Назад в меню' , callback_data:'go-back'}],
-//             [{text:'Отправить POST запрос', callback_data:'post'}],
-//         ]
-//     }
-// }
+const num_standard_1 = {
+    reply_markup:{
+        inline_keyboard: [
+            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{
+                text:'При оплате коммунальных услуг с учетом \
+                продолжительности отопительного периода 33 кв.м',
+                callback_data:'one'
+            }],
+            [{
+                text:'При оплате коммунальных услуг за жилые \
+                помещения с печным отоплением 42 кв.м',
+                callback_data:'two'
+            }],
+            [{
+                text:'При оплате коммунальных услуг из расчета \
+                12 месяцев календарного года 33 кв.м',
+                callback_data:'three'
+            }],
+            [{
+                text:'При оплате коммунальных услуг за жилые \
+                помещения с печным отоплением 33 кв.м',
+                callback_data:'four'
+            }],
+            [{
+                text:'При оплате коммунальных услуг с учетом \
+                продолжительности отопительного периода 42 кв.м',
+                callback_data:'five'
+            }],
+            [{
+                text:'При оплате коммунальных услуг из расчета \
+                12 месяцев календарного года 42 кв.м',
+                callback_data:'six'
+            }],
+            [{text:'Отправить POST запрос', callback_data:'post'}],
+        ]
+    }
+}
 
 module.exports = {
     main_menu,
@@ -77,4 +139,7 @@ module.exports = {
     city_area,
     num_people,
     num_season,
+    num_season_1,
+    num_standard,
+    num_standard_1,
 };

@@ -8,6 +8,9 @@ const {
   city_area,
   num_people,
   num_season,
+  num_season_1,
+  num_standard,
+  num_standard_1,
 } = require('./helpers/keyboards');
 const {
   greeting,
@@ -17,9 +20,15 @@ const {
   select_city,
   select_people,
   select_season,
+  select_standard,
 } = require('./helpers/msg');
 const {TELEGRAM_BOT_TOKEN} = process.env
 const bot = new Telegraf(process.env.BOT_TOKEN);
+let selected_city = {};
+let selected_people = {};
+let selected_season = {};
+let selected_standard = {};
+let standard_id = {};
 
 bot.start((ctx) =>{
   ctx.reply(greeting);
@@ -69,23 +78,7 @@ bot.action('gr', (ctx) =>{
   ctx.reply(select_city, city_area);
 })
 
-// обработка выбранной кнопки 'Кол-во челов'
-bot.action('next_people', (ctx)=>{
-  ctx.deleteMessage();
-  ctx.reply(select_people, num_people);
-});
-
-// обработка выбранной кнопки 'Период'
-bot.action('next_season', (ctx)=>{
-  ctx.deleteMessage();
-  ctx.reply(select_season, num_season);
-});
-
-let selected_city = {};
-let selected_people = {};
-let selected_season = {};
-
-// запомнить в каком городе
+// запомнить значение 'Городской округ'
 Object.keys(city_id).forEach(city => {
   bot.action(city, ctx =>{
     selected_city = city_id[city];
@@ -93,7 +86,13 @@ Object.keys(city_id).forEach(city => {
   })
 })
 
-// запомнить сколько человек в семье
+// обработка выбранной кнопки 'Кол-во человек'
+bot.action('next_people', (ctx)=>{
+  ctx.deleteMessage();
+  ctx.reply(select_people, num_people);
+});
+
+// запомнить значение 'Кол-во человек'
 Object.keys(people_id).forEach(people => {
   bot.action(people, ctx =>{
     selected_people = people_id[people];
@@ -101,7 +100,35 @@ Object.keys(people_id).forEach(people => {
   })
 })
 
-// запомнить в какой период
+// условие
+if (selected_people === 1) {
+  standard_id = {
+    one: 0,
+    two: 1,
+    three: 2,
+    four: 3,
+    five: 4,
+    six: 5,
+  }
+  // обработка выбранной кнопки 'Период'
+  bot.action('next_season', (ctx)=>{
+    ctx.deleteMessage();
+    ctx.reply(select_season, num_season_1);
+  });
+} else {
+  standard_id = {
+    one: 0,
+    two: 1,
+    three: 2,
+  }
+  // обработка выбранной кнопки 'Период'
+  bot.action('next_season', (ctx)=>{
+    ctx.deleteMessage();
+    ctx.reply(select_season, num_season);
+  });
+}
+
+// запомнить значение 'Период'
 Object.keys(season_id).forEach(season => {
   bot.action(season, ctx =>{
     selected_season = season_id[season];
@@ -109,31 +136,32 @@ Object.keys(season_id).forEach(season => {
   })
 })
 
-// // условие
-// if (selected_people == 1) {
-//   const standard_id = {
-//     one: 0,
-//     two: 1,
-//     three: 2,
-//     four: 3,
-//     five: 4,
-//     six: 5,
-//   }
-// } else {
-//   const standard_id = {
-//     one: 0,
-//     two: 1,
-//     three: 2,
-//   }
-// }
+//обработка выбранной кнопки 'выбрать страндарт'
+bot.action('select_standard', (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_standard, num_standard);
+})
+
+//обработка выбранной кнопки 'выбрать страндарт_1'
+bot.action('select_standard_1', (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_standard, num_standard_1);
+})
+
+// запомнить значение 'Стандарт'
+Object.keys(standard_id).forEach(standard => {
+  bot.action(standard, ctx =>{
+    selected_standard = standard_id[standard];
+    console.log(selected_standard);
+  })
+})
 
 // кнопка отправить POST
 bot.action('post', async ctx =>{
   const data = await search(selected_city, selected_people, selected_season)
-  get_data = data.rates[0];
-  // get_data = data.rates[вставить встандарт];
+  // get_data = data.rates[selected_standard];
   // calc = get_data.value + 1000;
-  console.log(get_data);
+  console.log(selected_standard);
 })
 
 bot.launch();

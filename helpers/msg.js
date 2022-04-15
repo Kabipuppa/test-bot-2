@@ -14,6 +14,8 @@ const select_people = 'Укажите количество членов семь
 
 const select_season = 'В какой период:';
 
+const select_standard = 'Выберете стандарт:';
+
 module.exports = {
     greeting,
     use_subsidy,
@@ -22,4 +24,5 @@ module.exports = {
     select_city,
     select_people,
     select_season,
+    select_standard,
 };
