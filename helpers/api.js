@@ -1,6 +1,6 @@
 const axios = require('axios');
 //Post запрос
-const search = async (code) => {
+const search = async (city, people, season) => {
  
     try{
       url = 'https://dom.gosuslugi.ru/tariff/api/rest/services/public-standards/search'
@@ -12,7 +12,7 @@ const search = async (code) => {
           "COST"
         ],
         oktmoCodes: [
-          code
+          city
         ],
         pageIndex: 1,
         tariffEntityType: "public_standarts",
@@ -21,10 +21,10 @@ const search = async (code) => {
   
       searchDataArr = response.data.items
       filterSearchDataArr = searchDataArr.filter(
-          item=> item.seasonalityType.name === "В отопительный период"
-            &&
-          item.familiesNumber.number === 5
-        );
+        item=> item.seasonalityType.name === season
+           &&
+         item.familiesNumber.number === people
+      );
       cases = filterSearchDataArr[0];
   
       return (cases);

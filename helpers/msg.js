@@ -10,10 +10,16 @@ const select_municipal = 'Выберите муниципальный район
 
 const select_city = 'Выберите городской округ:';
 
+const select_people = 'Укажите количество членов семьи:';
+
+const select_season = 'В какой период:';
+
 module.exports = {
     greeting,
     use_subsidy,
     select_municipal_or_city,
     select_municipal,
     select_city,
+    select_people,
+    select_season,
 };
