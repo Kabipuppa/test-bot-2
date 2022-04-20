@@ -8,7 +8,6 @@ const {
   city_area,
   num_people,
   num_season,
-  num_season_1,
   num_standard,
   num_standard_1,
 } = require('./helpers/keyboards');
@@ -28,6 +27,7 @@ let selected_city = {};
 let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
+let test = {};
 
 bot.start((ctx) =>{
   ctx.reply(greeting);
@@ -108,17 +108,23 @@ Object.keys(people_id).forEach(people => {
   })
 })
 
-// обработка выбранной кнопки 'Период_1'
-bot.action('next_season_1', (ctx)=>{
+if (selected_people == 1){
+  test = '1 человек';
+}else{
+  test = 'много людей';
+}
+
+// обработка выбранной кнопки 'Период'
+bot.action('next_season', (ctx)=>{
   ctx.deleteMessage();
-  ctx.reply(select_season, num_season_1);
+  ctx.reply(select_season, num_season);
 });
 
 // запомнить значение 'Период'
 Object.keys(season_id).forEach(season => {
   bot.action(season, ctx =>{
     selected_season = season_id[season];
-    console.log(selected_season);
+    console.log(test);
   })
 })
 
@@ -126,6 +132,12 @@ Object.keys(season_id).forEach(season => {
 bot.action('select_standard_1', (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_standard, num_standard_1);
+})
+
+// обработка выбранной кнопки 'Стандарт"
+bot.action('select_standard', (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_standard, num_standard);
 })
 
 // запомнить значение 'Стандарт'
@@ -141,7 +153,7 @@ bot.action('post', async ctx =>{
   const data = await search(selected_city, selected_people, selected_season)
   get_data = data.rates[selected_standard];
   // calc = get_data.value + 1000;
-  console.log(get_data.value);
+  console.log('Значение равно: ',get_data.value);
 })
 
 bot.launch();

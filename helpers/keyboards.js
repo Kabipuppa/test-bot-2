@@ -46,7 +46,7 @@ const num_people = {
             [{text:'3', callback_data:'three'},
             {text:'4', callback_data:'four'}], 
             [{text:'5 и более', callback_data:'five'}],
-            [{text:'Следующий вопрос про период', callback_data:'next_season_1'}], // ошибка
+            [{text:'Следующий вопрос про период', callback_data:'next_season'}], // ошибка
         ]
     }
 }
@@ -57,18 +57,8 @@ const num_season = {
             [{text:'Назад в меню' , callback_data:'go-back'}],
             [{text:'В отопительный период', callback_data:'hot_period'},
             {text:'Вне отопительного периода', callback_data:'cold_period'}],
-            [{text:'Выбрать стандарт', callback_data:'select_standard'}],
-        ]
-    }
-}
-
-const num_season_1 = {
-    reply_markup:{
-        inline_keyboard: [
-            [{text:'Назад в меню' , callback_data:'go-back'}],
-            [{text:'В отопительный период', callback_data:'hot_period'},
-            {text:'Вне отопительного периода', callback_data:'cold_period'}],
-            [{text:'Выбрать стандарт', callback_data:'select_standard_1'}],
+            [{text:'Выбрать стандарт(для нескольких)', callback_data:'select_standard'}],
+            [{text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'}],
         ]
     }
 }
@@ -79,15 +69,15 @@ const num_standard = {
             [{text:'Назад в меню' , callback_data:'go-back'}],
             [{
                 text:'При оплате коммунальных услуг из расчета 12 месяцев календарного года',
-                callback_data:'one'
+                callback_data:'a'
             }],
             [{
                 text:'При оплате коммунальных услуг за жилые помещения с печным отоплением',
-                callback_data:'two'
+                callback_data:'b'
             }],
             [{
                 text:'При оплате коммунальных услуг с учетом продолжительности отопительного периода',
-                callback_data:'three'
+                callback_data:'c'
             }],
             [{text:'Отправить POST запрос', callback_data:'post'}],
         ]
@@ -133,7 +123,6 @@ module.exports = {
     city_area,
     num_people,
     num_season,
-    num_season_1,
     num_standard,
     num_standard_1,
 };
