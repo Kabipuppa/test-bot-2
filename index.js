@@ -28,8 +28,6 @@ let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
 
-const test = {};
-
 bot.start((ctx) =>{
   ctx.reply(greeting);
   ctx.reply(use_subsidy);
@@ -106,11 +104,21 @@ Object.keys(people_id).forEach(people => {
   bot.action(people, ctx =>{
     selected_people = people_id[people];
     console.log(selected_people);
-    if (selected_people == 1){
-      test = {text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'};
+
+    if(selected_people === 1){
+      // обработка выбранной кнопки 'Стандарт_1"
+      bot.action('next_standard', (ctx) => {
+        ctx.deleteMessage();
+        ctx.reply(select_standard, num_standard_1);
+      })
     }else{
-      test = {text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'};
+      // обработка выбранной кнопки 'Стандарт"
+      bot.action('next_standard', (ctx) => {
+        ctx.deleteMessage();
+        ctx.reply(select_standard, num_standard);
+      })
     }
+
   })
 })
 
@@ -128,18 +136,6 @@ Object.keys(season_id).forEach(season => {
   })
 })
 
-// обработка выбранной кнопки 'Стандарт_1"
-bot.action('select_standard_1', (ctx) => {
-  ctx.deleteMessage();
-  ctx.reply(select_standard, num_standard_1);
-})
-
-// обработка выбранной кнопки 'Стандарт"
-bot.action('select_standard', (ctx) => {
-  ctx.deleteMessage();
-  ctx.reply(select_standard, num_standard);
-})
-
 // запомнить значение 'Стандарт'
 Object.keys(standard_id).forEach(standard => {
   bot.action(standard, ctx =>{
@@ -153,11 +149,7 @@ bot.action('post', async ctx =>{
   const data = await search(selected_city, selected_people, selected_season)
   get_data = data.rates[selected_standard];
   // calc = get_data.value + 1000;
-  console.log('Значение равно: ',get_data.value);
+  console.log(get_data);
 })
 
 bot.launch();
-
-module.exports = {
-  test
-};

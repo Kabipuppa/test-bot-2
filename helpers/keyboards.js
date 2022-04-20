@@ -1,7 +1,3 @@
-const {
-    test,
-} = require('../index');
-
 const main_menu = {
     reply_markup:{
         inline_keyboard: [
@@ -50,7 +46,7 @@ const num_people = {
             [{text:'3', callback_data:'three'},
             {text:'4', callback_data:'four'}], 
             [{text:'5 и более', callback_data:'five'}],
-            [{text:'Следующий вопрос про период', callback_data:'next_season'}], // ошибка
+            [{text:'Следующий вопрос про период', callback_data:'next_season'}],
         ]
     }
 }
@@ -61,7 +57,7 @@ const num_season = {
             [{text:'Назад в меню' , callback_data:'go-back'}],
             [{text:'В отопительный период', callback_data:'hot_period'},
             {text:'Вне отопительного периода', callback_data:'cold_period'}],
-            [test],
+            [{text:'Выбрать стандарт', callback_data:'next_standard'}],
         ]
     }
 }
