@@ -1,3 +1,7 @@
+const {
+    test,
+} = require('../index');
+
 const main_menu = {
     reply_markup:{
         inline_keyboard: [
@@ -57,8 +61,7 @@ const num_season = {
             [{text:'Назад в меню' , callback_data:'go-back'}],
             [{text:'В отопительный период', callback_data:'hot_period'},
             {text:'Вне отопительного периода', callback_data:'cold_period'}],
-            [{text:'Выбрать стандарт(для нескольких)', callback_data:'select_standard'}],
-            [{text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'}],
+            [test],
         ]
     }
 }

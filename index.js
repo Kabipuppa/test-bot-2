@@ -27,7 +27,8 @@ let selected_city = {};
 let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
-let test = {};
+
+const test = {};
 
 bot.start((ctx) =>{
   ctx.reply(greeting);
@@ -105,14 +106,13 @@ Object.keys(people_id).forEach(people => {
   bot.action(people, ctx =>{
     selected_people = people_id[people];
     console.log(selected_people);
+    if (selected_people == 1){
+      test = {text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'};
+    }else{
+      test = {text:'Выбрать стандарт(для одного)', callback_data:'select_standard_1'};
+    }
   })
 })
-
-if (selected_people == 1){
-  test = '1 человек';
-}else{
-  test = 'много людей';
-}
 
 // обработка выбранной кнопки 'Период'
 bot.action('next_season', (ctx)=>{
@@ -157,3 +157,7 @@ bot.action('post', async ctx =>{
 })
 
 bot.launch();
+
+module.exports = {
+  test
+};
