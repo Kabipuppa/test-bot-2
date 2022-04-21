@@ -10,7 +10,7 @@ const main_menu = {
 const municipal_area = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню', callback_data:'go-back'}],
+            [{text:'≪ Назад в меню', callback_data:'go-back'}],
             [{text:'Алтайский муниципальный район', callback_data:'al'}],
             [{text:'Аскизский муниципальный район', callback_data:'as'}], 
             [{text:'Бейский муниципальный район', callback_data:'be'}],   
@@ -26,13 +26,13 @@ const municipal_area = {
 const city_area = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню', callback_data:'go-back'}],
+            [{text:'≪ Назад в меню', callback_data:'go-back'}],
             [{text:'город Абакан', callback_data:'Abakan'}],
             [{text:'город Абаза', callback_data:'Abaza'}],
             [{text:'город Саяногорск', callback_data:'Sayanogorsk'}], 
             [{text:'город Сорск', callback_data:'Sorsk'}],
             [{text:'город Черногорск', callback_data:'Chernogorsk'}],
-            [{text:'Следующий вопрос про людей', callback_data:'next_people'}],
+            [{text:'Следующий вопрос про людей ≫', callback_data:'next_people'}],
         ]
     }
 }
@@ -40,13 +40,13 @@ const city_area = {
 const num_people = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню', callback_data:'go-back'}],
+            [{text:'≪ Назад в меню', callback_data:'go-back'}],
             [{text:'1', callback_data:'one'},
             {text:'2', callback_data:'two'}],
             [{text:'3', callback_data:'three'},
             {text:'4', callback_data:'four'}], 
             [{text:'5 и более', callback_data:'five'}],
-            [{text:'Следующий вопрос про период', callback_data:'next_season'}],
+            [{text:'Следующий вопрос про период ≫', callback_data:'next_season'}],
         ]
     }
 }
@@ -54,10 +54,10 @@ const num_people = {
 const num_season = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{text:'≪ Назад в меню' , callback_data:'go-back'}],
             [{text:'В отопительный период', callback_data:'hot_period'},
             {text:'Вне отопительного периода', callback_data:'cold_period'}],
-            [{text:'Выбрать стандарт', callback_data:'next_standard'}],
+            [{text:'Выбрать стандарт ≫', callback_data:'next_standard'}],
         ]
     }
 }
@@ -65,7 +65,7 @@ const num_season = {
 const num_standard = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{text:'≪ Назад в меню' , callback_data:'go-back'}],
             [{
                 text:'При оплате коммунальных услуг из расчета 12 месяцев календарного года',
                 callback_data:'a'
@@ -86,7 +86,7 @@ const num_standard = {
 const num_standard_1 = {
     reply_markup:{
         inline_keyboard: [
-            [{text:'Назад в меню' , callback_data:'go-back'}],
+            [{text:'≪ Назад в меню' , callback_data:'go-back'}],
             [{
                 text:'При оплате коммунальных услуг с учетом продолжительности отопительного периода 33 кв.м',
                 callback_data:'a'

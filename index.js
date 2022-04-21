@@ -69,6 +69,11 @@ const standard_id = {
 
 //обработка выбранной кнопки 'Назад'
 bot.action('go-back', (ctx) => {
+  selected_city = null;
+  selected_people = null;
+  selected_season = null;
+  selected_standard = null;
+  console.log('предыдущие: ', selected_city, selected_people, selected_season, selected_standard); // как отчистить?
   ctx.deleteMessage();
   ctx.reply(select_municipal_or_city, main_menu);
 })
@@ -103,7 +108,7 @@ bot.action('next_people', (ctx)=>{
 Object.keys(people_id).forEach(people => {
   bot.action(people, ctx =>{
     selected_people = people_id[people];
-    console.log(selected_people);
+    console.log('selected_people: ', selected_people);
 
     if(selected_people === 1){
       // обработка выбранной кнопки 'Стандарт_1"
@@ -132,7 +137,7 @@ bot.action('next_season', (ctx)=>{
 Object.keys(season_id).forEach(season => {
   bot.action(season, ctx =>{
     selected_season = season_id[season];
-    console.log(test);
+    console.log(selected_season);
   })
 })
 
@@ -148,8 +153,11 @@ Object.keys(standard_id).forEach(standard => {
 bot.action('post', async ctx =>{
   const data = await search(selected_city, selected_people, selected_season)
   get_data = data.rates[selected_standard];
+  jku = get_data.value * selected_people;
   // calc = get_data.value + 1000;
-  console.log(get_data);
+  console.log('Критерий: ', get_data.diffCriteria);
+  console.log('Значение критерия: ', get_data.value);
+  console.log('Значение ЖКУ равно: ', jku);
 })
 
 bot.launch();
