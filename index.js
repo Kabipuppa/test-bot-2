@@ -6,6 +6,7 @@ const {
   main_menu,
   municipal_area,
   city_area,
+  al_area,
   num_people,
   num_season,
   num_standard,
@@ -18,12 +19,16 @@ const {
   select_municipal,
   select_city,
   select_people,
+  select_people_completed,
   select_season,
   select_standard,
+  nasel_punct,
 } = require("./helpers/msg");
 const { TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new Telegraf(process.env.BOT_TOKEN);
+let oktomo_code = {};
 let selected_city = {};
+let selected_al = {};
 let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
@@ -61,13 +66,17 @@ const city_id = {
   Chernogorsk: "95715000",
 };
 
-// const people_id = {
-//   one: 1,
-//   two: 2,
-//   three: 3,
-//   four: 4,
-//   five: 5,
-// };
+const al_id = {
+  Arshanovo: "95605405",
+  BelyyYar: "95605410",
+  Izykhskiye: "95605418",
+  Kirovo: "95605420",
+  Krasno: "95605425",
+  Novomikh: "95605430",
+  Novoros: "95605435",
+  Ochury: "95605440",
+  Podsineye: "95605445",
+};
 
 const season_id = {
   hot_period: "В отопительный период",
@@ -85,14 +94,18 @@ const standard_id = {
 
 //обработка выбранной кнопки 'Назад'
 bot.action("go-back", (ctx) => {
+  oktomo_code = null;
   selected_city[ctx.chat.id] = null;
+  selected_al[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   people = null;
   console.log(
     "предыдущие: ",
+    oktomo_code,
     selected_city,
+    selected_al,
     selected_people,
     selected_season,
     selected_standard,
@@ -102,11 +115,26 @@ bot.action("go-back", (ctx) => {
   ctx.reply(select_municipal_or_city, main_menu);
 });
 
-// //обработка выбранной кнопки 'Муниципальный район'
-// bot.action('mn', (ctx) =>{
-//   ctx.deleteMessage();
-//   ctx.reply(select_municipal, municipal_area);
-// })
+//обработка выбранной кнопки 'Муниципальный район'
+bot.action("mn", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_municipal, municipal_area);
+});
+
+// обработка выбранной кнопки 'Алтайский'
+bot.action("al", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, al_area);
+});
+
+// запомнить значение 'Алтайский'
+Object.keys(al_id).forEach((al) => {
+  bot.action(al, (ctx) => {
+    selected_al[ctx.chat.id] = al_id[al];
+    oktomo_code = selected_al[ctx.chat.id];
+    console.log(selected_al);
+  });
+});
 
 //обработка выбранной кнопки 'Городской округ'
 bot.action("gr", (ctx) => {
@@ -118,6 +146,7 @@ bot.action("gr", (ctx) => {
 Object.keys(city_id).forEach((city) => {
   bot.action(city, (ctx) => {
     selected_city[ctx.chat.id] = city_id[city];
+    oktomo_code = selected_city[ctx.chat.id];
     console.log(selected_city);
   });
 });
@@ -129,17 +158,9 @@ bot.action("next_people", (ctx) => {
   bot.on("text", (ctx) => {
     selected_people[ctx.chat.id] = parseInt(ctx.message.text);
     console.log(selected_people);
+    ctx.reply(select_people_completed, num_people);
   });
-  ctx.reply("след", num_people);
 });
-
-// // запомнить значение 'Кол-во человек'
-// Object.keys(people_id).forEach((people) => {
-//   bot.action(people, (ctx) => {
-//     selected_people[ctx.chat.id] = people_id[people];
-//     console.log(selected_people);
-//   });
-// });
 
 // обработка выбранной кнопки 'Период'
 bot.action("next_season", (ctx) => {
@@ -163,10 +184,8 @@ bot.action("next_standard", (ctx) => {
   }
   if (selected_people[ctx.chat.id] === 1) {
     ctx.reply(select_standard, num_standard_1);
-    console.log("one");
   } else {
     ctx.reply(select_standard, num_standard);
-    console.log("two");
   }
 });
 
@@ -182,15 +201,15 @@ Object.keys(standard_id).forEach((standard) => {
 // кнопка отправить POST
 bot.action("post", async (ctx) => {
   const data = await search(
-    selected_city[ctx.chat.id],
+    oktomo_code,
     selected_people[ctx.chat.id],
     selected_season[ctx.chat.id]
   );
   get_data = data.rates[selected_standard[ctx.chat.id]];
-  // jku = get_data.value * selected_people[ctx.chat.id];
+  jku = get_data.value * selected_people[ctx.chat.id];
   console.log("Критерий: ", get_data.diffCriteria);
   console.log("Значение критерия: ", get_data.value);
-  // console.log("Значение ЖКУ равно: ", jku);
+  console.log("Значение ЖКУ равно: ", jku);
 });
 
 bot.launch();

@@ -14,9 +14,13 @@ const select_city = "Выберите городской округ:";
 
 const select_people = "Укажите количество членов семьи:";
 
+const select_people_completed = "Количество челоовек выбрано";
+
 const select_season = "В какой период:";
 
 const select_standard = "Выберете стандарт:";
+
+const nasel_punct = "Выберите населенный пункт:";
 
 module.exports = {
   greeting,
@@ -25,6 +29,8 @@ module.exports = {
   select_municipal,
   select_city,
   select_people,
+  select_people_completed,
   select_season,
   select_standard,
+  nasel_punct,
 };

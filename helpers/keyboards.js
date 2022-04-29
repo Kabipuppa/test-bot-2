@@ -13,14 +13,32 @@ const municipal_area = {
   reply_markup: {
     inline_keyboard: [
       [{ text: "≪ Назад в меню", callback_data: "go-back" }],
-      [{ text: "Алтайский муниципальный район", callback_data: "al" }],
-      [{ text: "Аскизский муниципальный район", callback_data: "as" }],
-      [{ text: "Бейский муниципальный район", callback_data: "be" }],
-      [{ text: "Боградский муниципальный район", callback_data: "bo" }],
-      [{ text: "Орджоникидзевский муниципальный район", callback_data: "or" }],
-      [{ text: "Таштыпский муниципальный район", callback_data: "ta" }],
-      [{ text: "Усть-Абаканский муниципальный район", callback_data: "ya" }],
-      [{ text: "Ширинский муниципальный район", callback_data: "sr" }],
+      [{ text: "Алтайский", callback_data: "al" }],
+      [{ text: "Аскизский", callback_data: "as" }],
+      [{ text: "Бейский", callback_data: "be" }],
+      [{ text: "Боградский", callback_data: "bo" }],
+      [{ text: "Орджоникидзевский", callback_data: "or" }],
+      [{ text: "Таштыпский", callback_data: "ta" }],
+      [{ text: "Усть-Абаканский", callback_data: "ya" }],
+      [{ text: "Ширинский", callback_data: "sr" }],
+    ],
+  },
+};
+
+const al_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "Аршаново", callback_data: "Arshanovo" }],
+      [{ text: "Белый Яр", callback_data: "BelyyYar" }],
+      [{ text: "Изыхские Копи", callback_data: "Izykhskiye" }],
+      [{ text: "Кирово", callback_data: "Kirovo" }],
+      [{ text: "Краснополье", callback_data: "Krasno" }],
+      [{ text: "Новомихайловка", callback_data: "Novomikh" }],
+      [{ text: "Новороссийское", callback_data: "Novoros" }],
+      [{ text: "Очуры", callback_data: "Ochury" }],
+      [{ text: "Подсинее", callback_data: "Podsineye" }],
+      [{ text: "Следующий вопрос ≫", callback_data: "next_people" }],
     ],
   },
 };
@@ -34,7 +52,7 @@ const city_area = {
       [{ text: "Саяногорск", callback_data: "Sayanogorsk" }],
       [{ text: "Сорск", callback_data: "Sorsk" }],
       [{ text: "Черногорск", callback_data: "Chernogorsk" }],
-      [{ text: "Следующий вопрос про людей ≫", callback_data: "next_people" }],
+      [{ text: "Следующий вопрос ≫", callback_data: "next_people" }],
     ],
   },
 };
@@ -52,7 +70,7 @@ const num_people = {
       //   { text: "4", callback_data: "four" },
       // ],
       // [{ text: "5 и более", callback_data: "five" }],
-      [{ text: "Следующий вопрос про период ≫", callback_data: "next_season" }],
+      [{ text: "Следующий вопрос ≫", callback_data: "next_season" }],
     ],
   },
 };
@@ -65,7 +83,7 @@ const num_season = {
         { text: "В отопительный период", callback_data: "hot_period" },
         { text: "Вне отопительного периода", callback_data: "cold_period" },
       ],
-      [{ text: "Выбрать стандарт ≫", callback_data: "next_standard" }],
+      [{ text: "Следующий вопрос ≫", callback_data: "next_standard" }],
     ],
   },
 };
@@ -146,6 +164,7 @@ module.exports = {
   main_menu,
   municipal_area,
   city_area,
+  al_area,
   num_people,
   num_season,
   num_standard,
