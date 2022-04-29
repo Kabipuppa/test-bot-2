@@ -29,11 +29,11 @@ const city_area = {
   reply_markup: {
     inline_keyboard: [
       [{ text: "≪ Назад в меню", callback_data: "go-back" }],
-      [{ text: "город Абакан", callback_data: "Abakan" }],
-      [{ text: "город Абаза", callback_data: "Abaza" }],
-      [{ text: "город Саяногорск", callback_data: "Sayanogorsk" }],
-      [{ text: "город Сорск", callback_data: "Sorsk" }],
-      [{ text: "город Черногорск", callback_data: "Chernogorsk" }],
+      [{ text: "Абакан", callback_data: "Abakan" }],
+      [{ text: "Абаза", callback_data: "Abaza" }],
+      [{ text: "Саяногорск", callback_data: "Sayanogorsk" }],
+      [{ text: "Сорск", callback_data: "Sorsk" }],
+      [{ text: "Черногорск", callback_data: "Chernogorsk" }],
       [{ text: "Следующий вопрос про людей ≫", callback_data: "next_people" }],
     ],
   },
@@ -43,15 +43,15 @@ const num_people = {
   reply_markup: {
     inline_keyboard: [
       [{ text: "≪ Назад в меню", callback_data: "go-back" }],
-      [
-        { text: "1", callback_data: "one" },
-        { text: "2", callback_data: "two" },
-      ],
-      [
-        { text: "3", callback_data: "three" },
-        { text: "4", callback_data: "four" },
-      ],
-      [{ text: "5 и более", callback_data: "five" }],
+      // [
+      //   { text: "1", callback_data: "one" },
+      //   { text: "2", callback_data: "two" },
+      // ],
+      // [
+      //   { text: "3", callback_data: "three" },
+      //   { text: "4", callback_data: "four" },
+      // ],
+      // [{ text: "5 и более", callback_data: "five" }],
       [{ text: "Следующий вопрос про период ≫", callback_data: "next_season" }],
     ],
   },

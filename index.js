@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { Telegraf } = require("telegraf");
+const { Telegraf, Extra } = require("telegraf");
 const util = require("util");
 const { search } = require("./helpers/api");
 const {
@@ -28,6 +28,22 @@ let selected_people = {};
 let selected_season = {};
 let selected_standard = {};
 
+// bot.command("inline", (ctx) => {
+//   return ctx.reply(
+//     "<b>Coke</b> or <i>Pepsi?</i>",
+//     Extra.HTML().markup((m) =>
+//       m.inlineKeyboard([
+//         m.callbackButton("Coke", "Coke"),
+//         m.callbackButton("Pepsi", "Pepsi"),
+//       ])
+//     )
+//   );
+// });
+
+// bot.action(/.+/, (ctx) => {
+//   return ctx.answerCbQuery(`Oh, ${ctx.match[0]}! Great choice`);
+// });
+
 bot.start((ctx) => {
   ctx.reply(greeting);
   ctx.reply(use_subsidy);
@@ -45,13 +61,13 @@ const city_id = {
   Chernogorsk: "95715000",
 };
 
-const people_id = {
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-};
+// const people_id = {
+//   one: 1,
+//   two: 2,
+//   three: 3,
+//   four: 4,
+//   five: 5,
+// };
 
 const season_id = {
   hot_period: "В отопительный период",
@@ -73,12 +89,14 @@ bot.action("go-back", (ctx) => {
   selected_people[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
+  people = null;
   console.log(
     "предыдущие: ",
     selected_city,
     selected_people,
     selected_season,
-    selected_standard
+    selected_standard,
+    people
   );
   ctx.deleteMessage();
   ctx.reply(select_municipal_or_city, main_menu);
@@ -107,16 +125,21 @@ Object.keys(city_id).forEach((city) => {
 // обработка выбранной кнопки 'Кол-во человек'
 bot.action("next_people", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_people, num_people);
-});
-
-// запомнить значение 'Кол-во человек'
-Object.keys(people_id).forEach((people) => {
-  bot.action(people, (ctx) => {
-    selected_people[ctx.chat.id] = people_id[people];
+  ctx.reply(select_people);
+  bot.on("text", (ctx) => {
+    selected_people[ctx.chat.id] = parseInt(ctx.message.text);
     console.log(selected_people);
   });
+  ctx.reply("след", num_people);
 });
+
+// // запомнить значение 'Кол-во человек'
+// Object.keys(people_id).forEach((people) => {
+//   bot.action(people, (ctx) => {
+//     selected_people[ctx.chat.id] = people_id[people];
+//     console.log(selected_people);
+//   });
+// });
 
 // обработка выбранной кнопки 'Период'
 bot.action("next_season", (ctx) => {
@@ -135,6 +158,9 @@ Object.keys(season_id).forEach((season) => {
 // обработка выбранной кнопки 'Стандарт'
 bot.action("next_standard", (ctx) => {
   ctx.deleteMessage();
+  if (selected_people[ctx.chat.id] > 5) {
+    selected_people[ctx.chat.id] = 5;
+  }
   if (selected_people[ctx.chat.id] === 1) {
     ctx.reply(select_standard, num_standard_1);
     console.log("one");
@@ -149,6 +175,7 @@ Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, (ctx) => {
     selected_standard[ctx.chat.id] = standard_id[standard];
     console.log(selected_standard);
+    console.log(selected_people[ctx.chat.id]);
   });
 });
 
@@ -160,10 +187,10 @@ bot.action("post", async (ctx) => {
     selected_season[ctx.chat.id]
   );
   get_data = data.rates[selected_standard[ctx.chat.id]];
-  jku = get_data.value * selected_people[ctx.chat.id];
+  // jku = get_data.value * selected_people[ctx.chat.id];
   console.log("Критерий: ", get_data.diffCriteria);
   console.log("Значение критерия: ", get_data.value);
-  console.log("Значение ЖКУ равно: ", jku);
+  // console.log("Значение ЖКУ равно: ", jku);
 });
 
 bot.launch();
