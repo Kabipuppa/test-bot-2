@@ -440,13 +440,13 @@ bot.action("post", async (ctx) => {
   }
 
   console.log(a, b, c, d);
-  // console.log("Критерий: ", get_data.diffCriteria);
-  // console.log("Значение критерия: ", get_data.value);
-  // console.log("Значение ЖКУ равно: ", jku);
-  // console.log("ЖКХ итого:", jkh_total);
-  // console.log("Совокупный доход:", total_family_sum);
-  // console.log("ПМ:", pm);
-  // console.log("макс.доля.расх:", max_costs);
+  console.log("Критерий: ", get_data.diffCriteria);
+  console.log("Значение критерия: ", get_data.value);
+  console.log("Значение ЖКУ равно: ", jku);
+  console.log("ЖКХ итого:", jkh_total);
+  console.log("Совокупный доход:", total_family_sum);
+  console.log("ПМ:", pm);
+  console.log("макс.доля.расх:", max_costs);
 });
 
 bot.launch();
