@@ -12,6 +12,10 @@ const {
   num_old,
   num_kid,
   num_salary,
+  num_jkh,
+  num_electric,
+  num_benefit,
+  num_benefit_size,
   num_season,
   num_standard,
   num_standard_1,
@@ -23,21 +27,33 @@ const {
   select_municipal,
   select_city,
   select_people,
+  select_work,
+  select_old,
+  select_kid,
+  select_salary,
+  select_jkh,
+  select_electric,
+  select_benefit,
+  select_benefit_size,
   select_people_completed,
   select_work_completed,
   select_old_completed,
   select_kid_completed,
   select_salary_completed,
-  select_work,
-  select_old,
-  select_kid,
-  select_salary,
+  select_jkh_completed,
+  select_electric_completed,
+  select_benefit_completed,
+  select_benefit_size_completed,
   select_season,
   select_standard,
   nasel_punct,
 } = require("./helpers/msg");
 const { TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new Telegraf(process.env.BOT_TOKEN);
+let a = {};
+let b = {};
+let c = {};
+let d = {};
 let oktomo_code = {};
 let selected_city = {};
 let selected_al = {};
@@ -46,6 +62,10 @@ let selected_work = {};
 let selected_old = {};
 let selected_kid = {};
 let selected_salary = {};
+let selected_jkh = {};
+let selected_electric = {};
+let selected_benefit = {};
+let selected_benefit_size = {};
 let selected_season = {};
 let selected_standard = {};
 let step = {};
@@ -59,6 +79,10 @@ bot.start((ctx) => {
   selected_old[ctx.chat.id] = null;
   selected_kid[ctx.chat.id] = null;
   selected_salary[ctx.chat.id] = null;
+  selected_jkh[ctx.chat.id] = null;
+  selected_electric[ctx.chat.id] = null;
+  selected_benefit[ctx.chat.id] = null;
+  selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   ctx.reply(greeting);
@@ -74,6 +98,10 @@ bot.command("subsidy", (ctx) => {
   selected_old[ctx.chat.id] = null;
   selected_kid[ctx.chat.id] = null;
   selected_salary[ctx.chat.id] = null;
+  selected_jkh[ctx.chat.id] = null;
+  selected_electric[ctx.chat.id] = null;
+  selected_benefit[ctx.chat.id] = null;
+  selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   ctx.reply(select_municipal_or_city, main_menu);
@@ -107,6 +135,11 @@ const al_id = {
   Podsineye: "95605445",
 };
 
+const benefit_id = {
+  yes: 1,
+  no: 0,
+};
+
 const season_id = {
   hot_period: "В отопительный период",
   cold_period: "Вне отопительного периода",
@@ -136,6 +169,10 @@ bot.action("go-back", (ctx) => {
   selected_old[ctx.chat.id] = null;
   selected_kid[ctx.chat.id] = null;
   selected_salary[ctx.chat.id] = null;
+  selected_jkh[ctx.chat.id] = null;
+  selected_electric[ctx.chat.id] = null;
+  selected_benefit[ctx.chat.id] = null;
+  selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   ctx.deleteMessage();
@@ -207,11 +244,48 @@ bot.action("next_kid", (ctx) => {
   step = 4;
 });
 
-// обработка выбранной кнопки 'Кол-во детей'
+// обработка выбранной кнопки 'зп'
 bot.action("next_salary", (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_salary);
   step = 5;
+});
+
+bot.action("next_jkh", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_jkh);
+  step = 6;
+});
+
+bot.action("next_electric", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_electric);
+  step = 7;
+});
+
+bot.action("next_benefit", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_benefit, num_benefit);
+});
+
+// запомнить значение 'Льгота'
+Object.keys(benefit_id).forEach((benefit) => {
+  bot.action(benefit, (ctx) => {
+    selected_benefit[ctx.chat.id] = benefit_id[benefit];
+    console.log("льгота", selected_benefit);
+  });
+});
+
+bot.action("next_benefit_size", (ctx) => {
+  ctx.deleteMessage();
+  if (selected_benefit[ctx.chat.id] === 0) {
+    selected_benefit_size[ctx.chat.id] = 0;
+    console.log(selected_benefit_size[ctx.chat.id]);
+    ctx.reply(select_season, num_season);
+  } else {
+    ctx.reply(select_benefit_size);
+    step = 8;
+  }
 });
 
 function state(a, b, c, d, completed, num, selected, ctx) {
@@ -279,6 +353,18 @@ bot.on("text", (ctx) => {
     selected_salary[ctx.chat.id] = parseInt(ctx.message.text);
     console.log("зп:", selected_salary);
     ctx.reply(select_salary_completed, num_salary);
+  } else if (step === 6) {
+    selected_jkh[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("жкх:", selected_jkh);
+    ctx.reply(select_jkh_completed, num_jkh);
+  } else if (step === 7) {
+    selected_electric[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("электричество':", selected_electric);
+    ctx.reply(select_electric_completed, num_electric);
+  } else if (step === 8) {
+    selected_benefit_size[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("размер льготы:", selected_benefit_size);
+    ctx.reply(select_benefit_size_completed, num_benefit_size);
   }
 });
 
@@ -328,9 +414,39 @@ bot.action("post", async (ctx) => {
   );
   get_data = data.rates[selected_standard[ctx.chat.id]];
   jku = get_data.value * selected_people[ctx.chat.id];
-  console.log("Критерий: ", get_data.diffCriteria);
-  console.log("Значение критерия: ", get_data.value);
-  console.log("Значение ЖКУ равно: ", jku);
+  jkh_total =
+    selected_jkh[ctx.chat.id] +
+    selected_electric[ctx.chat.id] -
+    selected_benefit_size[ctx.chat.id];
+  total_family_sum = selected_salary[ctx.chat.id] / 6;
+  pm =
+    selected_work[ctx.chat.id] * 12702 +
+    selected_old[ctx.chat.id] * 10022 +
+    selected_kid[ctx.chat.id] * 11303;
+  max_costs = (total_family_sum / pm) * 0.12 * total_family_sum;
+
+  a = jkh_total > max_costs;
+  b = total_family_sum > pm;
+  c = jkh_total >= (0.22 * total_family_sum) / 6;
+  d = jku - (0.22 * total_family_sum) / 6 > 0;
+
+  result = a || (b && c && d);
+
+  if (result == false) {
+    ctx.reply("Субсидия положена! 🟢");
+  }
+  if (result == true) {
+    ctx.reply("Субсидия не положена! 🟠");
+  }
+
+  console.log(a, b, c, d);
+  // console.log("Критерий: ", get_data.diffCriteria);
+  // console.log("Значение критерия: ", get_data.value);
+  // console.log("Значение ЖКУ равно: ", jku);
+  // console.log("ЖКХ итого:", jkh_total);
+  // console.log("Совокупный доход:", total_family_sum);
+  // console.log("ПМ:", pm);
+  // console.log("макс.доля.расх:", max_costs);
 });
 
 bot.launch();

@@ -96,6 +96,46 @@ const num_salary = {
   reply_markup: {
     inline_keyboard: [
       [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_jkh" }],
+    ],
+  },
+};
+
+const num_jkh = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_electric" }],
+    ],
+  },
+  parse_mode: "html",
+};
+
+const num_electric = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_benefit" }],
+    ],
+  },
+  parse_mode: "html",
+};
+
+const num_benefit = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "Да", callback_data: "yes" }],
+      [{ text: "Нет", callback_data: "no" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_benefit_size" }],
+    ],
+  },
+};
+
+const num_benefit_size = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [{ text: "🟢 Следующий вопрос »", callback_data: "next_season" }],
     ],
   },
@@ -181,7 +221,7 @@ const num_standard_1 = {
           callback_data: "f",
         },
       ],
-      [{ text: "Отправить POST запрос", callback_data: "post" }],
+      [{ text: "Отправить ответ о субсидии", callback_data: "post" }],
     ],
   },
 };
@@ -196,6 +236,10 @@ module.exports = {
   num_old,
   num_kid,
   num_salary,
+  num_jkh,
+  num_electric,
+  num_benefit,
+  num_benefit_size,
   num_season,
   num_standard,
   num_standard_1,
