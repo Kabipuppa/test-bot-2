@@ -8,6 +8,9 @@ const {
   city_area,
   al_area,
   num_people,
+  num_work,
+  num_old,
+  num_kid,
   num_season,
   num_standard,
   num_standard_1,
@@ -20,6 +23,12 @@ const {
   select_city,
   select_people,
   select_people_completed,
+  select_work_completed,
+  select_old_completed,
+  select_kid_completed,
+  select_work,
+  select_old,
+  select_kid,
   select_season,
   select_standard,
   nasel_punct,
@@ -30,31 +39,52 @@ let oktomo_code = {};
 let selected_city = {};
 let selected_al = {};
 let selected_people = {};
+let selected_work = {};
+let selected_old = {};
+let selected_kid = {};
 let selected_season = {};
 let selected_standard = {};
-
-// bot.command("inline", (ctx) => {
-//   return ctx.reply(
-//     "<b>Coke</b> or <i>Pepsi?</i>",
-//     Extra.HTML().markup((m) =>
-//       m.inlineKeyboard([
-//         m.callbackButton("Coke", "Coke"),
-//         m.callbackButton("Pepsi", "Pepsi"),
-//       ])
-//     )
-//   );
-// });
-
-// bot.action(/.+/, (ctx) => {
-//   return ctx.answerCbQuery(`Oh, ${ctx.match[0]}! Great choice`);
-// });
+let step = {};
 
 bot.start((ctx) => {
+  oktomo_code = null;
+  selected_city[ctx.chat.id] = null;
+  selected_al[ctx.chat.id] = null;
+  selected_people[ctx.chat.id] = null;
+  selected_work[ctx.chat.id] = null;
+  selected_old[ctx.chat.id] = null;
+  selected_kid[ctx.chat.id] = null;
+  selected_season[ctx.chat.id] = null;
+  selected_standard[ctx.chat.id] = null;
+  console.log(
+    "предыдущие: ",
+    oktomo_code,
+    selected_city,
+    selected_al,
+    selected_people,
+    selected_season,
+    selected_standard
+  );
   ctx.reply(greeting);
   ctx.reply(use_subsidy);
 });
 
 bot.command("subsidy", (ctx) => {
+  oktomo_code = null;
+  selected_city[ctx.chat.id] = null;
+  selected_al[ctx.chat.id] = null;
+  selected_people[ctx.chat.id] = null;
+  selected_season[ctx.chat.id] = null;
+  selected_standard[ctx.chat.id] = null;
+  console.log(
+    "предыдущие: ",
+    oktomo_code,
+    selected_city,
+    selected_al,
+    selected_people,
+    selected_season,
+    selected_standard
+  );
   ctx.reply(select_municipal_or_city, main_menu);
 });
 
@@ -64,6 +94,14 @@ const city_id = {
   Sayanogorsk: "95708000",
   Sorsk: "95709000",
   Chernogorsk: "95715000",
+};
+
+const name_city = {
+  Abakan: "Абакан",
+  Abaza: "Абаза",
+  Sayanogorsk: "Саяногорск",
+  Sorsk: "Сорск",
+  Chernogorsk: "Черногорск",
 };
 
 const al_id = {
@@ -83,6 +121,11 @@ const season_id = {
   cold_period: "Вне отопительного периода",
 };
 
+const season_name = {
+  hot_period: "Отопительный",
+  cold_period: "Неотопительный",
+};
+
 const standard_id = {
   a: 0,
   b: 1,
@@ -100,7 +143,6 @@ bot.action("go-back", (ctx) => {
   selected_people[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
-  people = null;
   console.log(
     "предыдущие: ",
     oktomo_code,
@@ -108,8 +150,7 @@ bot.action("go-back", (ctx) => {
     selected_al,
     selected_people,
     selected_season,
-    selected_standard,
-    people
+    selected_standard
   );
   ctx.deleteMessage();
   ctx.reply(select_municipal_or_city, main_menu);
@@ -147,6 +188,7 @@ Object.keys(city_id).forEach((city) => {
   bot.action(city, (ctx) => {
     selected_city[ctx.chat.id] = city_id[city];
     oktomo_code = selected_city[ctx.chat.id];
+    ctx.answerCbQuery(`Вы выбрали город: ${name_city[city]}`);
     console.log(selected_city);
   });
 });
@@ -155,11 +197,92 @@ Object.keys(city_id).forEach((city) => {
 bot.action("next_people", (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_people);
-  bot.on("text", (ctx) => {
+  step = 1;
+});
+
+// обработка выбранной кнопки 'Кол-во рабочих'
+bot.action("next_work", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_work);
+  step = 2;
+});
+
+// обработка выбранной кнопки 'Кол-во пенсионеров'
+bot.action("next_old", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_old);
+  step = 3;
+});
+
+// обработка выбранной кнопки 'Кол-во детей'
+bot.action("next_kid", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_kid);
+  step = 4;
+});
+
+function state(a, b, c, d, completed, num, selected, ctx) {
+  value = a - b - c - d;
+  sum = b + c + d;
+  if (value === 0) {
+    ctx.reply(completed, num_kid);
+    console.log(selected);
+  } else if (step === 4 && a != sum) {
+    ctx.reply("Введенное число больше количества человек в вашей семье.");
+  } else if (value > 0) {
+    ctx.reply(completed, num);
+    console.log(selected);
+  } else {
+    ctx.reply("Введенное число больше количества человек в вашей семье.");
+    console.log(a, b, c, d);
+  }
+}
+
+bot.on("text", (ctx) => {
+  if (step === 1) {
     selected_people[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log(selected_people);
+    console.log("люди:", selected_people);
     ctx.reply(select_people_completed, num_people);
-  });
+  } else if (step === 2) {
+    selected_work[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("работяги:", selected_work);
+    state(
+      selected_people[ctx.chat.id],
+      selected_work[ctx.chat.id],
+      0,
+      0,
+      select_work_completed,
+      num_work,
+      selected_work,
+      ctx
+    );
+  } else if (step === 3) {
+    selected_old[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("старики:", selected_old);
+    state(
+      selected_people[ctx.chat.id],
+      selected_work[ctx.chat.id],
+      selected_old[ctx.chat.id],
+      0,
+      select_old_completed,
+      num_old,
+      selected_old,
+      ctx
+    );
+  } else if (step === 4) {
+    selected_kid[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("дети:", selected_old);
+    state(
+      selected_people[ctx.chat.id],
+      selected_work[ctx.chat.id],
+      selected_old[ctx.chat.id],
+      selected_kid[ctx.chat.id],
+      select_kid_completed,
+      num_kid,
+      selected_kid,
+      ctx
+    );
+  }
 });
 
 // обработка выбранной кнопки 'Период'
@@ -172,6 +295,7 @@ bot.action("next_season", (ctx) => {
 Object.keys(season_id).forEach((season) => {
   bot.action(season, (ctx) => {
     selected_season[ctx.chat.id] = season_id[season];
+    ctx.answerCbQuery(`Вы выбрали: ${season_name[season]} период`);
     console.log(selected_season);
   });
 });

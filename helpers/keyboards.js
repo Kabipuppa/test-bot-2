@@ -1,10 +1,8 @@
 const main_menu = {
   reply_markup: {
     inline_keyboard: [
-      [
-        { text: "Муниципальный район", callback_data: "mn" },
-        { text: "Городской округ", callback_data: "gr" },
-      ],
+      [{ text: "Муниципальный район", callback_data: "mn" }],
+      [{ text: "Городской округ", callback_data: "gr" }],
     ],
   },
 };
@@ -12,7 +10,7 @@ const main_menu = {
 const municipal_area = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [{ text: "Алтайский", callback_data: "al" }],
       [{ text: "Аскизский", callback_data: "as" }],
       [{ text: "Бейский", callback_data: "be" }],
@@ -28,7 +26,7 @@ const municipal_area = {
 const al_area = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [{ text: "Аршаново", callback_data: "Arshanovo" }],
       [{ text: "Белый Яр", callback_data: "BelyyYar" }],
       [{ text: "Изыхские Копи", callback_data: "Izykhskiye" }],
@@ -38,7 +36,7 @@ const al_area = {
       [{ text: "Новороссийское", callback_data: "Novoros" }],
       [{ text: "Очуры", callback_data: "Ochury" }],
       [{ text: "Подсинее", callback_data: "Podsineye" }],
-      [{ text: "Следующий вопрос ≫", callback_data: "next_people" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_people" }],
     ],
   },
 };
@@ -46,31 +44,50 @@ const al_area = {
 const city_area = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [{ text: "Абакан", callback_data: "Abakan" }],
       [{ text: "Абаза", callback_data: "Abaza" }],
       [{ text: "Саяногорск", callback_data: "Sayanogorsk" }],
       [{ text: "Сорск", callback_data: "Sorsk" }],
       [{ text: "Черногорск", callback_data: "Chernogorsk" }],
-      [{ text: "Следующий вопрос ≫", callback_data: "next_people" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_people" }],
     ],
   },
+  parse_mode: "html",
 };
 
 const num_people = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
-      // [
-      //   { text: "1", callback_data: "one" },
-      //   { text: "2", callback_data: "two" },
-      // ],
-      // [
-      //   { text: "3", callback_data: "three" },
-      //   { text: "4", callback_data: "four" },
-      // ],
-      // [{ text: "5 и более", callback_data: "five" }],
-      [{ text: "Следующий вопрос ≫", callback_data: "next_season" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_work" }],
+    ],
+  },
+};
+
+const num_work = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_old" }],
+    ],
+  },
+};
+
+const num_old = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_kid" }],
+    ],
+  },
+};
+
+const num_kid = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_season" }],
     ],
   },
 };
@@ -78,12 +95,12 @@ const num_people = {
 const num_season = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [
-        { text: "В отопительный период", callback_data: "hot_period" },
-        { text: "Вне отопительного периода", callback_data: "cold_period" },
+        { text: "Отопительный", callback_data: "hot_period" },
+        { text: "Неотопительный", callback_data: "cold_period" },
       ],
-      [{ text: "Следующий вопрос ≫", callback_data: "next_standard" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_standard" }],
     ],
   },
 };
@@ -91,7 +108,7 @@ const num_season = {
 const num_standard = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [
         {
           text: "При оплате коммунальных услуг из расчета 12 месяцев календарного года",
@@ -118,7 +135,7 @@ const num_standard = {
 const num_standard_1 = {
   reply_markup: {
     inline_keyboard: [
-      [{ text: "≪ Назад в меню", callback_data: "go-back" }],
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [
         {
           text: "При оплате коммунальных услуг с учетом продолжительности отопительного периода 33 кв.м",
@@ -166,6 +183,9 @@ module.exports = {
   city_area,
   al_area,
   num_people,
+  num_work,
+  num_old,
+  num_kid,
   num_season,
   num_standard,
   num_standard_1,

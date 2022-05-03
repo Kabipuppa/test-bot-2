@@ -10,11 +10,23 @@ const select_municipal_or_city =
 
 const select_municipal = "Выберите муниципальный район:";
 
-const select_city = "Выберите городской округ:";
+const select_city = "<b>Выберите городской округ:</b>";
 
 const select_people = "Укажите количество членов семьи:";
 
-const select_people_completed = "Количество челоовек выбрано";
+const select_people_completed = "Количество человек выбрано";
+
+const select_work_completed = "Количество трудоспосообных выбрано";
+
+const select_old_completed = "Количество пенсионеров выбрано";
+
+const select_kid_completed = "Количество детей выбрано";
+
+const select_work = "Сколько трудоспоособных в вашей семье?";
+
+const select_old = "Сколько пенсионеров в вашей семье?";
+
+const select_kid = "Сколько детей в вашей семье?";
 
 const select_season = "В какой период:";
 
@@ -30,6 +42,12 @@ module.exports = {
   select_city,
   select_people,
   select_people_completed,
+  select_work_completed,
+  select_old_completed,
+  select_kid_completed,
+  select_work,
+  select_old,
+  select_kid,
   select_season,
   select_standard,
   nasel_punct,
