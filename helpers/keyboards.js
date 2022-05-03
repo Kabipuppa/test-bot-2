@@ -87,6 +87,15 @@ const num_kid = {
   reply_markup: {
     inline_keyboard: [
       [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
+      [{ text: "🟢 Следующий вопрос »", callback_data: "next_salary" }],
+    ],
+  },
+};
+
+const num_salary = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "« Назад в меню 🟢", callback_data: "go-back" }],
       [{ text: "🟢 Следующий вопрос »", callback_data: "next_season" }],
     ],
   },
@@ -186,6 +195,7 @@ module.exports = {
   num_work,
   num_old,
   num_kid,
+  num_salary,
   num_season,
   num_standard,
   num_standard_1,

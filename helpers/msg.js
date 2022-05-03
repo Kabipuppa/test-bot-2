@@ -22,11 +22,15 @@ const select_old_completed = "Количество пенсионеров выб
 
 const select_kid_completed = "Количество детей выбрано";
 
+const select_salary_completed = "Сумма дохода указана";
+
 const select_work = "Сколько трудоспоособных в вашей семье?";
 
 const select_old = "Сколько пенсионеров в вашей семье?";
 
 const select_kid = "Сколько детей в вашей семье?";
+
+const select_salary = "Введите сумму дохода за 6 месяцев";
 
 const select_season = "В какой период:";
 
@@ -45,9 +49,11 @@ module.exports = {
   select_work_completed,
   select_old_completed,
   select_kid_completed,
+  select_salary_completed,
   select_work,
   select_old,
   select_kid,
+  select_salary,
   select_season,
   select_standard,
   nasel_punct,

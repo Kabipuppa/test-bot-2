@@ -11,6 +11,7 @@ const {
   num_work,
   num_old,
   num_kid,
+  num_salary,
   num_season,
   num_standard,
   num_standard_1,
@@ -26,9 +27,11 @@ const {
   select_work_completed,
   select_old_completed,
   select_kid_completed,
+  select_salary_completed,
   select_work,
   select_old,
   select_kid,
+  select_salary,
   select_season,
   select_standard,
   nasel_punct,
@@ -42,6 +45,7 @@ let selected_people = {};
 let selected_work = {};
 let selected_old = {};
 let selected_kid = {};
+let selected_salary = {};
 let selected_season = {};
 let selected_standard = {};
 let step = {};
@@ -54,17 +58,9 @@ bot.start((ctx) => {
   selected_work[ctx.chat.id] = null;
   selected_old[ctx.chat.id] = null;
   selected_kid[ctx.chat.id] = null;
+  selected_salary[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
-  console.log(
-    "предыдущие: ",
-    oktomo_code,
-    selected_city,
-    selected_al,
-    selected_people,
-    selected_season,
-    selected_standard
-  );
   ctx.reply(greeting);
   ctx.reply(use_subsidy);
 });
@@ -74,17 +70,12 @@ bot.command("subsidy", (ctx) => {
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
+  selected_work[ctx.chat.id] = null;
+  selected_old[ctx.chat.id] = null;
+  selected_kid[ctx.chat.id] = null;
+  selected_salary[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
-  console.log(
-    "предыдущие: ",
-    oktomo_code,
-    selected_city,
-    selected_al,
-    selected_people,
-    selected_season,
-    selected_standard
-  );
   ctx.reply(select_municipal_or_city, main_menu);
 });
 
@@ -141,17 +132,12 @@ bot.action("go-back", (ctx) => {
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
+  selected_work[ctx.chat.id] = null;
+  selected_old[ctx.chat.id] = null;
+  selected_kid[ctx.chat.id] = null;
+  selected_salary[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
-  console.log(
-    "предыдущие: ",
-    oktomo_code,
-    selected_city,
-    selected_al,
-    selected_people,
-    selected_season,
-    selected_standard
-  );
   ctx.deleteMessage();
   ctx.reply(select_municipal_or_city, main_menu);
 });
@@ -221,6 +207,13 @@ bot.action("next_kid", (ctx) => {
   step = 4;
 });
 
+// обработка выбранной кнопки 'Кол-во детей'
+bot.action("next_salary", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(select_salary);
+  step = 5;
+});
+
 function state(a, b, c, d, completed, num, selected, ctx) {
   value = a - b - c - d;
   sum = b + c + d;
@@ -282,6 +275,10 @@ bot.on("text", (ctx) => {
       selected_kid,
       ctx
     );
+  } else if (step === 5) {
+    selected_salary[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("зп:", selected_salary);
+    ctx.reply(select_salary_completed, num_salary);
   }
 });
 
