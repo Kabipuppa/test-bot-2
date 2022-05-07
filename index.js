@@ -3,10 +3,23 @@ const { Telegraf, Extra } = require("telegraf");
 const util = require("util");
 const { search } = require("./helpers/api");
 const {
+  city_id,
+  city_name,
+  al_id,
+  al_name,
+  benefit_id,
+  season_id,
+  season_name,
+  standard_id,
+} = require("./helpers/const");
+const {
+  start,
+  cancel_btn,
   main_menu,
   municipal_area,
   city_area,
   al_area,
+  next_people_btn,
   num_people,
   num_work,
   num_old,
@@ -21,7 +34,7 @@ const {
   num_standard_1,
 } = require("./helpers/keyboards");
 const {
-  greeting,
+  cancel_caption,
   use_subsidy,
   select_municipal_or_city,
   select_municipal,
@@ -50,10 +63,6 @@ const {
 } = require("./helpers/msg");
 const { TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new Telegraf(process.env.BOT_TOKEN);
-let a = {};
-let b = {};
-let c = {};
-let d = {};
 let oktomo_code = {};
 let selected_city = {};
 let selected_al = {};
@@ -85,11 +94,11 @@ bot.start((ctx) => {
   selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
-  ctx.reply(greeting);
-  ctx.reply(use_subsidy);
+  ctx.reply(`Добро пожаловать ${ctx.chat.first_name}! 🙂`);
+  ctx.reply(use_subsidy, start);
 });
 
-bot.command("subsidy", (ctx) => {
+bot.hears("« Отмена", (ctx) => {
   oktomo_code = null;
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
@@ -104,84 +113,23 @@ bot.command("subsidy", (ctx) => {
   selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
+  ctx.reply(cancel_caption, start);
+});
+
+// bot.command("subsidy", (ctx) => {
+//   ctx.reply(select_municipal_or_city, main_menu);
+// });
+
+bot.hears("Начать опрос", (ctx) => {
   ctx.reply(select_municipal_or_city, main_menu);
 });
 
-const city_id = {
-  Abakan: "95701000",
-  Abaza: "95702000",
-  Sayanogorsk: "95708000",
-  Sorsk: "95709000",
-  Chernogorsk: "95715000",
-};
+// bot.action("mn", (ctx) => {
+//   ctx.deleteMessage();
+// ctx.reply(select_municipal, municipal_area);
+// });
 
-const name_city = {
-  Abakan: "Абакан",
-  Abaza: "Абаза",
-  Sayanogorsk: "Саяногорск",
-  Sorsk: "Сорск",
-  Chernogorsk: "Черногорск",
-};
-
-const al_id = {
-  Arshanovo: "95605405",
-  BelyyYar: "95605410",
-  Izykhskiye: "95605418",
-  Kirovo: "95605420",
-  Krasno: "95605425",
-  Novomikh: "95605430",
-  Novoros: "95605435",
-  Ochury: "95605440",
-  Podsineye: "95605445",
-};
-
-const benefit_id = {
-  yes: 1,
-  no: 0,
-};
-
-const season_id = {
-  hot_period: "В отопительный период",
-  cold_period: "Вне отопительного периода",
-};
-
-const season_name = {
-  hot_period: "Отопительный",
-  cold_period: "Неотопительный",
-};
-
-const standard_id = {
-  a: 0,
-  b: 1,
-  c: 2,
-  d: 3,
-  e: 4,
-  f: 5,
-};
-
-//обработка выбранной кнопки 'Назад'
-bot.action("go-back", (ctx) => {
-  oktomo_code = null;
-  selected_city[ctx.chat.id] = null;
-  selected_al[ctx.chat.id] = null;
-  selected_people[ctx.chat.id] = null;
-  selected_work[ctx.chat.id] = null;
-  selected_old[ctx.chat.id] = null;
-  selected_kid[ctx.chat.id] = null;
-  selected_salary[ctx.chat.id] = null;
-  selected_jkh[ctx.chat.id] = null;
-  selected_electric[ctx.chat.id] = null;
-  selected_benefit[ctx.chat.id] = null;
-  selected_benefit_size[ctx.chat.id] = null;
-  selected_season[ctx.chat.id] = null;
-  selected_standard[ctx.chat.id] = null;
-  ctx.deleteMessage();
-  ctx.reply(select_municipal_or_city, main_menu);
-});
-
-//обработка выбранной кнопки 'Муниципальный район'
-bot.action("mn", (ctx) => {
-  ctx.deleteMessage();
+bot.hears("Муниципальный район", (ctx) => {
   ctx.reply(select_municipal, municipal_area);
 });
 
@@ -194,24 +142,33 @@ bot.action("al", (ctx) => {
 // запомнить значение 'Алтайский'
 Object.keys(al_id).forEach((al) => {
   bot.action(al, (ctx) => {
+    ctx.deleteMessage();
     selected_al[ctx.chat.id] = al_id[al];
     oktomo_code = selected_al[ctx.chat.id];
+    ctx.reply(`Вы выбрали населенный пункт: ${al_name[al]}`, cancel_btn);
+    ctx.reply("Нажмите 👇", next_people_btn);
     console.log(selected_al);
   });
 });
 
-//обработка выбранной кнопки 'Городской округ'
-bot.action("gr", (ctx) => {
-  ctx.deleteMessage();
+// //обработка выбранной кнопки 'Городской округ'
+// bot.action("gr", (ctx) => {
+//   ctx.deleteMessage();
+//   ctx.reply(select_city, city_area);
+// });
+
+bot.hears("Городской округ", (ctx) => {
   ctx.reply(select_city, city_area);
 });
 
 // запомнить значение 'Городской округ'
 Object.keys(city_id).forEach((city) => {
   bot.action(city, (ctx) => {
+    ctx.deleteMessage();
     selected_city[ctx.chat.id] = city_id[city];
     oktomo_code = selected_city[ctx.chat.id];
-    ctx.answerCbQuery(`Вы выбрали город: ${name_city[city]}`);
+    ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
+    ctx.reply("Нажмите 👇", next_people_btn);
     console.log(selected_city);
   });
 });
@@ -219,8 +176,12 @@ Object.keys(city_id).forEach((city) => {
 // обработка выбранной кнопки 'Кол-во человек'
 bot.action("next_people", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_people);
-  step = 1;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_people);
+    step = 1;
+  }
 });
 
 // обработка выбранной кнопки 'Кол-во рабочих'
@@ -295,12 +256,16 @@ function state(a, b, c, d, completed, num, selected, ctx) {
     ctx.reply(completed, num_kid);
     console.log(selected);
   } else if (step === 4 && a != sum) {
-    ctx.reply("Введенное число больше количества человек в вашей семье.");
+    ctx.reply(
+      "Введенное число не соответствет количеству человек в вашей семье."
+    );
   } else if (value > 0) {
     ctx.reply(completed, num);
     console.log(selected);
   } else {
-    ctx.reply("Введенное число больше количества человек в вашей семье.");
+    ctx.reply(
+      "Введенное число не соответствет количеству человек в вашей семье."
+    );
     console.log(a, b, c, d);
   }
 }
@@ -401,7 +366,6 @@ Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, (ctx) => {
     selected_standard[ctx.chat.id] = standard_id[standard];
     console.log(selected_standard);
-    console.log(selected_people[ctx.chat.id]);
   });
 });
 
@@ -412,7 +376,7 @@ bot.action("post", async (ctx) => {
     selected_people[ctx.chat.id],
     selected_season[ctx.chat.id]
   );
-  get_data = data.rates[selected_standard[ctx.chat.id]];
+  get_data = data.rates[selected_standard[ctx.chat.id]]; // ошибка
   jku = get_data.value * selected_people[ctx.chat.id];
   jkh_total =
     selected_jkh[ctx.chat.id] +
@@ -430,13 +394,16 @@ bot.action("post", async (ctx) => {
   c = jkh_total >= (0.22 * total_family_sum) / 6;
   d = jku - (0.22 * total_family_sum) / 6 > 0;
 
-  result = a || (b && c && d);
+  result = b && c && d;
 
-  if (result == false) {
+  if (a == true) {
     ctx.reply("Субсидия положена! 🟢");
-  }
-  if (result == true) {
-    ctx.reply("Субсидия не положена! 🟠");
+  } else {
+    if (result == true) {
+      ctx.reply("Субсидия положена! 🟢");
+    } else {
+      ctx.reply("Субсидия не положена! 🟠");
+    }
   }
 
   console.log(a, b, c, d);
