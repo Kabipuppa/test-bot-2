@@ -38,10 +38,10 @@ const al_name = {
   Podsineye: "Подсинее",
 };
 
-const benefit_id = {
-  yes: 1,
-  no: 0,
-};
+// const benefit_id = {
+//   yes: 1,
+//   no: 0,
+// };
 
 const season_id = {
   hot_period: "В отопительный период",
@@ -67,7 +67,7 @@ module.exports = {
   city_name,
   al_id,
   al_name,
-  benefit_id,
+  // benefit_id,
   season_id,
   season_name,
   standard_id,

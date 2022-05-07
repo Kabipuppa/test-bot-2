@@ -30,11 +30,14 @@ const {
   num_benefit,
   num_benefit_size,
   num_season,
+  next_standard_btn,
   num_standard,
   num_standard_1,
+  post_btn,
 } = require("./helpers/keyboards");
 const {
   cancel_caption,
+  info,
   use_subsidy,
   select_municipal_or_city,
   select_municipal,
@@ -74,7 +77,6 @@ let selected_salary = {};
 let selected_jkh = {};
 let selected_electric = {};
 let selected_benefit = {};
-let selected_benefit_size = {};
 let selected_season = {};
 let selected_standard = {};
 let step = {};
@@ -91,7 +93,6 @@ bot.start((ctx) => {
   selected_jkh[ctx.chat.id] = null;
   selected_electric[ctx.chat.id] = null;
   selected_benefit[ctx.chat.id] = null;
-  selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   ctx.reply(`Добро пожаловать ${ctx.chat.first_name}! 🙂`);
@@ -110,24 +111,14 @@ bot.hears("« Отмена", (ctx) => {
   selected_jkh[ctx.chat.id] = null;
   selected_electric[ctx.chat.id] = null;
   selected_benefit[ctx.chat.id] = null;
-  selected_benefit_size[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
   ctx.reply(cancel_caption, start);
 });
 
-// bot.command("subsidy", (ctx) => {
-//   ctx.reply(select_municipal_or_city, main_menu);
-// });
-
 bot.hears("Начать опрос", (ctx) => {
   ctx.reply(select_municipal_or_city, main_menu);
 });
-
-// bot.action("mn", (ctx) => {
-//   ctx.deleteMessage();
-// ctx.reply(select_municipal, municipal_area);
-// });
 
 bot.hears("Муниципальный район", (ctx) => {
   ctx.reply(select_municipal, municipal_area);
@@ -147,15 +138,9 @@ Object.keys(al_id).forEach((al) => {
     oktomo_code = selected_al[ctx.chat.id];
     ctx.reply(`Вы выбрали населенный пункт: ${al_name[al]}`, cancel_btn);
     ctx.reply("Нажмите 👇", next_people_btn);
-    console.log(selected_al);
+    console.log("Насел.пункт: ", selected_al);
   });
 });
-
-// //обработка выбранной кнопки 'Городской округ'
-// bot.action("gr", (ctx) => {
-//   ctx.deleteMessage();
-//   ctx.reply(select_city, city_area);
-// });
 
 bot.hears("Городской округ", (ctx) => {
   ctx.reply(select_city, city_area);
@@ -169,7 +154,7 @@ Object.keys(city_id).forEach((city) => {
     oktomo_code = selected_city[ctx.chat.id];
     ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
     ctx.reply("Нажмите 👇", next_people_btn);
-    console.log(selected_city);
+    console.log("город: ", selected_city);
   });
 });
 
@@ -229,24 +214,16 @@ bot.action("next_benefit", (ctx) => {
   ctx.reply(select_benefit, num_benefit);
 });
 
-// запомнить значение 'Льгота'
-Object.keys(benefit_id).forEach((benefit) => {
-  bot.action(benefit, (ctx) => {
-    selected_benefit[ctx.chat.id] = benefit_id[benefit];
-    console.log("льгота", selected_benefit);
-  });
+bot.hears("Да", (ctx) => {
+  ctx.reply(select_benefit_size, cancel_btn);
+  step = 8;
 });
 
-bot.action("next_benefit_size", (ctx) => {
-  ctx.deleteMessage();
-  if (selected_benefit[ctx.chat.id] === 0) {
-    selected_benefit_size[ctx.chat.id] = 0;
-    console.log(selected_benefit_size[ctx.chat.id]);
-    ctx.reply(select_season, num_season);
-  } else {
-    ctx.reply(select_benefit_size);
-    step = 8;
-  }
+bot.hears("Нет", (ctx) => {
+  selected_benefit[ctx.chat.id] = 0;
+  console.log("льгота: ", selected_benefit);
+  ctx.reply(select_season, cancel_btn);
+  ctx.reply("Нажмите 👇", num_season);
 });
 
 function state(a, b, c, d, completed, num, selected, ctx) {
@@ -254,14 +231,12 @@ function state(a, b, c, d, completed, num, selected, ctx) {
   sum = b + c + d;
   if (value === 0) {
     ctx.reply(completed, num_kid);
-    console.log(selected);
   } else if (step === 4 && a != sum) {
     ctx.reply(
       "Введенное число не соответствет количеству человек в вашей семье."
     );
   } else if (value > 0) {
     ctx.reply(completed, num);
-    console.log(selected);
   } else {
     ctx.reply(
       "Введенное число не соответствет количеству человек в вашей семье."
@@ -327,8 +302,8 @@ bot.on("text", (ctx) => {
     console.log("электричество':", selected_electric);
     ctx.reply(select_electric_completed, num_electric);
   } else if (step === 8) {
-    selected_benefit_size[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("размер льготы:", selected_benefit_size);
+    selected_benefit[ctx.chat.id] = parseInt(ctx.message.text);
+    console.log("размер льготы:", selected_benefit);
     ctx.reply(select_benefit_size_completed, num_benefit_size);
   }
 });
@@ -342,8 +317,10 @@ bot.action("next_season", (ctx) => {
 // запомнить значение 'Период'
 Object.keys(season_id).forEach((season) => {
   bot.action(season, (ctx) => {
+    ctx.deleteMessage();
     selected_season[ctx.chat.id] = season_id[season];
-    ctx.answerCbQuery(`Вы выбрали: ${season_name[season]} период`);
+    ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
+    ctx.reply("Нажмите 👇", next_standard_btn);
     console.log(selected_season);
   });
 });
@@ -364,7 +341,13 @@ bot.action("next_standard", (ctx) => {
 // запомнить значение 'Стандарт'
 Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, (ctx) => {
+    ctx.deleteMessage();
     selected_standard[ctx.chat.id] = standard_id[standard];
+    ctx.reply(`Вы выбрали стандарт: ${standard_id[standard]}`, cancel_btn);
+    ctx.reply(
+      "Пожалуйста, для получения ответа от бота нажмите <b>«Отправить ответ о субсидии»</b> 👇 и немного подождите . . .",
+      post_btn
+    );
     console.log(selected_standard);
   });
 });
@@ -381,7 +364,7 @@ bot.action("post", async (ctx) => {
   jkh_total =
     selected_jkh[ctx.chat.id] +
     selected_electric[ctx.chat.id] -
-    selected_benefit_size[ctx.chat.id];
+    selected_benefit[ctx.chat.id];
   total_family_sum = selected_salary[ctx.chat.id] / 6;
   pm =
     selected_work[ctx.chat.id] * 12702 +
@@ -397,12 +380,12 @@ bot.action("post", async (ctx) => {
   result = b && c && d;
 
   if (a == true) {
-    ctx.reply("Субсидия положена! 🟢");
+    ctx.reply("Субсидия положена! 🟢", info);
   } else {
     if (result == true) {
-      ctx.reply("Субсидия положена! 🟢");
+      ctx.reply("Субсидия положена! 🟢", info);
     } else {
-      ctx.reply("Субсидия не положена! 🟠");
+      ctx.reply("Субсидия не положена! 🟠", info);
     }
   }
 

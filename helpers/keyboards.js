@@ -135,11 +135,8 @@ const num_electric = {
 
 const num_benefit = {
   reply_markup: {
-    inline_keyboard: [
-      [{ text: "Да", callback_data: "yes" }],
-      [{ text: "Нет", callback_data: "no" }],
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_benefit_size" }],
-    ],
+    keyboard: [[{ text: "Да" }, { text: "Нет" }], [{ text: "« Отмена" }]],
+    resize_keyboard: true,
   },
 };
 
@@ -158,6 +155,13 @@ const num_season = {
         { text: "Отопительный", callback_data: "hot_period" },
         { text: "Неотопительный", callback_data: "cold_period" },
       ],
+    ],
+  },
+};
+
+const next_standard_btn = {
+  reply_markup: {
+    inline_keyboard: [
       [{ text: "🟢 Следующий вопрос »", callback_data: "next_standard" }],
     ],
   },
@@ -169,22 +173,21 @@ const num_standard = {
       [
         {
           text: "За жилые помещения с печным отоплением",
-          callback_data: "b",
+          callback_data: "a",
         },
       ],
       [
         {
           text: "С учетом продолжительности отопительного периода",
-          callback_data: "c",
+          callback_data: "b",
         },
       ],
       [
         {
           text: "Из расчета 12 месяцев календарного года",
-          callback_data: "a",
+          callback_data: "c",
         },
       ],
-      [{ text: "Отправить ответ о субсидии", callback_data: "post" }],
     ],
   },
 };
@@ -201,7 +204,7 @@ const num_standard_1 = {
       [
         {
           text: "С учетом продолжительности отопительного периода 42 кв.м",
-          callback_data: "e",
+          callback_data: "b",
         },
       ],
       [
@@ -213,24 +216,32 @@ const num_standard_1 = {
       [
         {
           text: "Из расчета 12 месяцев календарного года 42 кв.м",
-          callback_data: "f",
-        },
-      ],
-      [
-        {
-          text: "За жилые помещения с печным отоплением 33 кв.м",
           callback_data: "d",
         },
       ],
       [
         {
-          text: "За жилые помещения с печным отоплением 42 кв.м",
-          callback_data: "b",
+          text: "За жилые помещения с печным отоплением 33 кв.м",
+          callback_data: "e",
         },
       ],
+      [
+        {
+          text: "За жилые помещения с печным отоплением 42 кв.м",
+          callback_data: "f",
+        },
+      ],
+    ],
+  },
+};
+
+const post_btn = {
+  reply_markup: {
+    inline_keyboard: [
       [{ text: "Отправить ответ о субсидии", callback_data: "post" }],
     ],
   },
+  parse_mode: "html",
 };
 
 module.exports = {
@@ -251,6 +262,8 @@ module.exports = {
   num_benefit,
   num_benefit_size,
   num_season,
+  next_standard_btn,
   num_standard,
   num_standard_1,
+  post_btn,
 };
