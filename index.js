@@ -340,16 +340,15 @@ Object.keys(standard_id).forEach((standard) => {
     ctx.deleteMessage();
     selected_standard[ctx.chat.id] = standard_id[standard];
     ctx.reply(`Вы выбрали стандарт: ${standard_id[standard]}`, cancel_btn);
-    ctx.reply(
-      "Пожалуйста, для получения ответа от бота нажмите <b>«Отправить ответ о субсидии»</b> 👇 и немного подождите . . .",
-      post_btn
-    );
+    ctx.reply("Нажмите 👇", post_btn);
     console.log(selected_standard);
   });
 });
 
 // кнопка отправить POST
 bot.action("post", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply("Пожалуйста подождите . . .");
   const data = await search(
     oktomo_code,
     selected_people[ctx.chat.id],
