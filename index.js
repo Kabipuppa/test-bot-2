@@ -226,7 +226,7 @@ bot.hears("Нет", (ctx) => {
   ctx.reply("Нажмите 👇", num_season);
 });
 
-function state(a, b, c, d, completed, num, selected, ctx) {
+function state(a, b, c, d, completed, num, ctx) {
   value = a - b - c - d;
   sum = b + c + d;
   if (value === 0) {
@@ -241,7 +241,6 @@ function state(a, b, c, d, completed, num, selected, ctx) {
     ctx.reply(
       "Введенное число не соответствет количеству человек в вашей семье."
     );
-    console.log(a, b, c, d);
   }
 }
 
@@ -260,7 +259,6 @@ bot.on("text", (ctx) => {
       0,
       select_work_completed,
       num_work,
-      selected_work,
       ctx
     );
   } else if (step === 3) {
@@ -273,7 +271,6 @@ bot.on("text", (ctx) => {
       0,
       select_old_completed,
       num_old,
-      selected_old,
       ctx
     );
   } else if (step === 4) {
@@ -286,7 +283,6 @@ bot.on("text", (ctx) => {
       selected_kid[ctx.chat.id],
       select_kid_completed,
       num_kid,
-      selected_kid,
       ctx
     );
   } else if (step === 5) {
