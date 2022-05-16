@@ -7,7 +7,6 @@ const {
   city_name,
   al_id,
   al_name,
-  benefit_id,
   season_id,
   season_name,
   standard_id,
@@ -58,12 +57,12 @@ const {
   select_salary_completed,
   select_jkh_completed,
   select_electric_completed,
-  select_benefit_completed,
   select_benefit_size_completed,
   select_season,
   select_standard,
   nasel_punct,
 } = require("./helpers/msg");
+const { state } = require("./helpers/utils");
 const { TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new Telegraf(process.env.BOT_TOKEN);
 let oktomo_code = {};
@@ -172,41 +171,65 @@ bot.action("next_people", (ctx) => {
 // обработка выбранной кнопки 'Кол-во рабочих'
 bot.action("next_work", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_work);
-  step = 2;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_work);
+    step = 2;
+  }
 });
 
 // обработка выбранной кнопки 'Кол-во пенсионеров'
 bot.action("next_old", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_old);
-  step = 3;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_old);
+    step = 3;
+  }
 });
 
 // обработка выбранной кнопки 'Кол-во детей'
 bot.action("next_kid", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_kid);
-  step = 4;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_kid);
+    step = 4;
+  }
 });
 
 // обработка выбранной кнопки 'зп'
 bot.action("next_salary", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_salary);
-  step = 5;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_salary);
+    step = 5;
+  }
 });
 
 bot.action("next_jkh", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_jkh);
-  step = 6;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_jkh);
+    step = 6;
+  }
 });
 
 bot.action("next_electric", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_electric);
-  step = 7;
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_electric);
+    step = 7;
+  }
 });
 
 bot.action("next_benefit", (ctx) => {
@@ -215,6 +238,7 @@ bot.action("next_benefit", (ctx) => {
 });
 
 bot.hears("Да", (ctx) => {
+  ctx.deleteMessage();
   ctx.reply(select_benefit_size, cancel_btn);
   step = 8;
 });
@@ -225,24 +249,6 @@ bot.hears("Нет", (ctx) => {
   ctx.reply(select_season, cancel_btn);
   ctx.reply("Нажмите 👇", num_season);
 });
-
-function state(a, b, c, d, completed, num, ctx) {
-  value = a - b - c - d;
-  sum = b + c + d;
-  if (value === 0) {
-    ctx.reply(completed, num_kid);
-  } else if (step === 4 && a != sum) {
-    ctx.reply(
-      "Введенное число не соответствет количеству человек в вашей семье."
-    );
-  } else if (value > 0) {
-    ctx.reply(completed, num);
-  } else {
-    ctx.reply(
-      "Введенное число не соответствет количеству человек в вашей семье."
-    );
-  }
-}
 
 bot.on("text", (ctx) => {
   if (step === 1) {
@@ -259,7 +265,9 @@ bot.on("text", (ctx) => {
       0,
       select_work_completed,
       num_work,
-      ctx
+      ctx,
+      step,
+      num_kid
     );
   } else if (step === 3) {
     selected_old[ctx.chat.id] = parseInt(ctx.message.text);
@@ -271,7 +279,9 @@ bot.on("text", (ctx) => {
       0,
       select_old_completed,
       num_old,
-      ctx
+      ctx,
+      step,
+      num_kid
     );
   } else if (step === 4) {
     selected_kid[ctx.chat.id] = parseInt(ctx.message.text);
@@ -283,7 +293,9 @@ bot.on("text", (ctx) => {
       selected_kid[ctx.chat.id],
       select_kid_completed,
       num_kid,
-      ctx
+      ctx,
+      step,
+      num_kid
     );
   } else if (step === 5) {
     selected_salary[ctx.chat.id] = parseInt(ctx.message.text);
@@ -307,17 +319,25 @@ bot.on("text", (ctx) => {
 // обработка выбранной кнопки 'Период'
 bot.action("next_season", (ctx) => {
   ctx.deleteMessage();
-  ctx.reply(select_season, num_season);
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
+  } else {
+    ctx.reply(select_season, num_season);
+  }
 });
 
 // запомнить значение 'Период'
 Object.keys(season_id).forEach((season) => {
   bot.action(season, (ctx) => {
     ctx.deleteMessage();
-    selected_season[ctx.chat.id] = season_id[season];
-    ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
-    ctx.reply("Нажмите 👇", next_standard_btn);
-    console.log(selected_season);
+    if (oktomo_code === null) {
+      ctx.reply("Начните опрос заново 👇");
+    } else {
+      selected_season[ctx.chat.id] = season_id[season];
+      ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
+      ctx.reply("Нажмите 👇", next_standard_btn);
+      console.log(selected_season);
+    }
   });
 });
 
@@ -327,10 +347,14 @@ bot.action("next_standard", (ctx) => {
   if (selected_people[ctx.chat.id] > 5) {
     selected_people[ctx.chat.id] = 5;
   }
-  if (selected_people[ctx.chat.id] === 1) {
-    ctx.reply(select_standard, num_standard_1);
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
   } else {
-    ctx.reply(select_standard, num_standard);
+    if (selected_people[ctx.chat.id] === 1) {
+      ctx.reply(select_standard, num_standard_1);
+    } else {
+      ctx.reply(select_standard, num_standard);
+    }
   }
 });
 
@@ -338,60 +362,146 @@ bot.action("next_standard", (ctx) => {
 Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, (ctx) => {
     ctx.deleteMessage();
-    selected_standard[ctx.chat.id] = standard_id[standard];
-    ctx.reply(`Вы выбрали стандарт: ${standard_id[standard]}`, cancel_btn);
-    ctx.reply("Нажмите 👇", post_btn);
-    console.log(selected_standard);
+    if (oktomo_code === null) {
+      ctx.reply("Начните опрос заново 👇");
+    } else {
+      selected_standard[ctx.chat.id] = standard_id[standard];
+      ctx.reply(`Вы выбрали стандарт: ${standard_id[standard]}`, cancel_btn);
+      ctx.reply("Нажмите 👇", post_btn);
+      console.log(selected_standard);
+    }
   });
 });
 
 // кнопка отправить POST
 bot.action("post", async (ctx) => {
   ctx.deleteMessage();
-  ctx.reply("Пожалуйста подождите . . .");
-  const data = await search(
-    oktomo_code,
-    selected_people[ctx.chat.id],
-    selected_season[ctx.chat.id]
-  );
-  get_data = data.rates[selected_standard[ctx.chat.id]]; // ошибка
-  jku = get_data.value * selected_people[ctx.chat.id];
-  jkh_total =
-    selected_jkh[ctx.chat.id] +
-    selected_electric[ctx.chat.id] -
-    selected_benefit[ctx.chat.id];
-  total_family_sum = selected_salary[ctx.chat.id] / 6;
-  pm =
-    selected_work[ctx.chat.id] * 12702 +
-    selected_old[ctx.chat.id] * 10022 +
-    selected_kid[ctx.chat.id] * 11303;
-  max_costs = (total_family_sum / pm) * 0.12 * total_family_sum;
-
-  a = jkh_total > max_costs;
-  b = total_family_sum > pm;
-  c = jkh_total >= (0.22 * total_family_sum) / 6;
-  d = jku - (0.22 * total_family_sum) / 6 > 0;
-
-  result = b && c && d;
-
-  if (a == true) {
-    ctx.reply("Субсидия положена! 🟢", info);
+  if (oktomo_code === null) {
+    ctx.reply("Начните опрос заново 👇");
   } else {
-    if (result == true) {
-      ctx.reply("Субсидия положена! 🟢", info);
-    } else {
-      ctx.reply("Субсидия не положена! 🟠", info);
-    }
-  }
+    ctx.reply("Пожалуйста подождите . . .");
+    const data = await search(
+      oktomo_code,
+      selected_people[ctx.chat.id],
+      selected_season[ctx.chat.id]
+    );
+    let x = {};
+    let get_data = [];
+    let arr_data = [];
+    let word_mas = [];
+    let chunk_arr = [];
+    let word_for_many = [
+      ["продолжительности", "периода"],
+      ["12", "года"],
+      ["печным", "отоплением"],
+    ];
+    let word_for_one = [
+      ["отопительного", "33"],
+      ["отопительного", "42"],
+      ["12", "33"],
+      ["12", "42"],
+      ["печным", "33"],
+      ["печным", "42"],
+    ];
 
-  console.log(a, b, c, d);
-  console.log("Критерий: ", get_data.diffCriteria);
-  console.log("Значение критерия: ", get_data.value);
-  console.log("Значение ЖКУ равно: ", jku);
-  console.log("ЖКХ итого:", jkh_total);
-  console.log("Совокупный доход:", total_family_sum);
-  console.log("ПМ:", pm);
-  console.log("макс.доля.расх:", max_costs);
+    if (selected_people[ctx.chat.id] > 1) {
+      x = 3;
+      chunk_arr = word_for_many[selected_standard[ctx.chat.id]].slice(0, 3);
+    } else if (selected_people[ctx.chat.id] === 1) {
+      x = 6;
+      chunk_arr = word_for_one[selected_standard[ctx.chat.id]].slice(0, 3);
+    }
+    console.log(chunk_arr);
+
+    for (var i = 0; i < x; i++) {
+      arr_data[i] = data.rates[i];
+      word_mas[i] = arr_data[i].diffCriteria.split(" ");
+      console.log(
+        word_mas[i].includes(chunk_arr[0]) && word_mas[i].includes(chunk_arr[1])
+      );
+    }
+    console.log(word_mas);
+
+    if (
+      word_mas[0].includes(chunk_arr[0]) &&
+      word_mas[0].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[0];
+    } else if (
+      word_mas[1].includes(chunk_arr[0]) &&
+      word_mas[1].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[1];
+    } else if (
+      word_mas[2].includes(chunk_arr[0]) &&
+      word_mas[2].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[2];
+    } else if (
+      word_mas[3].includes(chunk_arr[0]) &&
+      word_mas[3].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[3];
+    } else if (
+      word_mas[4].includes(chunk_arr[0]) &&
+      word_mas[4].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[4];
+    } else if (
+      word_mas[5].includes(chunk_arr[0]) &&
+      word_mas[5].includes(chunk_arr[1]) === true
+    ) {
+      get_data = data.rates[5];
+    }
+
+    console.log(get_data.diffCriteria);
+    console.log(get_data.value);
+
+    jku = get_data.value * selected_people[ctx.chat.id]; // жку
+    jkh_total = // жкх итого
+      selected_jkh[ctx.chat.id] +
+      selected_electric[ctx.chat.id] -
+      selected_benefit[ctx.chat.id];
+    total_family_sum = selected_salary[ctx.chat.id] / 6; // совоокупный доход
+    pm = // прожиточный минимумыы
+      selected_work[ctx.chat.id] * 12702 +
+      selected_old[ctx.chat.id] * 10022 +
+      selected_kid[ctx.chat.id] * 11303;
+    max_costs = (total_family_sum / pm) * 0.12 * total_family_sum; // макс.допуст.расх
+
+    // Размер субсидии = Расходы на ЖКХ (ИТОГО)  - Максимально допустимая доля расходов 12%
+    sum_subsidy = jkh_total - max_costs * 0.12;
+
+    a = jkh_total > max_costs;
+    b = total_family_sum > pm;
+    c = jkh_total >= (0.22 * total_family_sum) / 6;
+    d = jku - (0.22 * total_family_sum) / 6 > 0;
+
+    result = b && c && d;
+
+    if (a == true) {
+      ctx.reply("Субсидия положена! 🟢");
+      ctx.reply(`Субсидия равна: ${sum_subsidy.toFixed(2)} рублей`);
+      ctx.reply(info);
+    } else {
+      if (result == true) {
+        ctx.reply("Субсидия положена! 🟢");
+        ctx.reply(`Субсидия равна: ${sum_subsidy.toFixed(2)} рублей`);
+        ctx.reply(info);
+      } else {
+        ctx.reply("Субсидия не положена! 🟠", info);
+      }
+    }
+
+    console.log(a, b, c, d);
+    console.log("Критерий: ", get_data.diffCriteria);
+    console.log("Значение критерия: ", get_data.value);
+    console.log("Значение ЖКУ равно: ", jku);
+    console.log("ЖКХ итого:", jkh_total);
+    console.log("Совокупный доход:", total_family_sum);
+    console.log("ПМ:", pm);
+    console.log("макс.доля.расх:", max_costs);
+  }
 });
 
 bot.launch();

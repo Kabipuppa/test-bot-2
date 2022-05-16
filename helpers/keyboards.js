@@ -152,8 +152,8 @@ const num_season = {
   reply_markup: {
     inline_keyboard: [
       [
-        { text: "Отопительный", callback_data: "hot_period" },
-        { text: "Неотопительный", callback_data: "cold_period" },
+        { text: "октябрь - март", callback_data: "hot_period" },
+        { text: "апрель - сентябрь", callback_data: "cold_period" },
       ],
     ],
   },
@@ -172,19 +172,19 @@ const num_standard = {
     inline_keyboard: [
       [
         {
-          text: "За жилые помещения с печным отоплением",
+          text: "С учетом продолжительности отопительного периода",
           callback_data: "a",
         },
       ],
       [
         {
-          text: "С учетом продолжительности отопительного периода",
+          text: "Из расчета 12 месяцев календарного года",
           callback_data: "b",
         },
       ],
       [
         {
-          text: "Из расчета 12 месяцев календарного года",
+          text: "За жилые помещения с печным отоплением",
           callback_data: "c",
         },
       ],
