@@ -39,22 +39,6 @@ const select_benefit =
 
 const select_benefit_size = "Введите размер льготы:";
 
-const select_people_completed = "Количество человек выбрано";
-
-const select_work_completed = "Количество трудоспосообных выбрано";
-
-const select_old_completed = "Количество пенсионеров выбрано";
-
-const select_kid_completed = "Количество детей выбрано";
-
-const select_salary_completed = "Сумма дохода указана";
-
-const select_jkh_completed = "Начисление по квартплате указано";
-
-const select_electric_completed = "Начисление по электроэнергии указано";
-
-const select_benefit_size_completed = "Размер льготы указан";
-
 const select_season = "За какой период требуется субсидия?";
 
 const select_standard =
@@ -78,14 +62,6 @@ module.exports = {
   select_electric,
   select_benefit,
   select_benefit_size,
-  select_people_completed,
-  select_work_completed,
-  select_old_completed,
-  select_kid_completed,
-  select_salary_completed,
-  select_jkh_completed,
-  select_electric_completed,
-  select_benefit_size_completed,
   select_season,
   select_standard,
   nasel_punct,

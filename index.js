@@ -19,17 +19,8 @@ const {
   city_area,
   al_area,
   next_people_btn,
-  num_people,
-  num_work,
-  num_old,
-  num_kid,
-  num_salary,
-  num_jkh,
-  num_electric,
   num_benefit,
-  num_benefit_size,
   num_season,
-  next_standard_btn,
   num_standard,
   num_standard_1,
   post_btn,
@@ -50,19 +41,11 @@ const {
   select_electric,
   select_benefit,
   select_benefit_size,
-  select_people_completed,
-  select_work_completed,
-  select_old_completed,
-  select_kid_completed,
-  select_salary_completed,
-  select_jkh_completed,
-  select_electric_completed,
-  select_benefit_size_completed,
   select_season,
   select_standard,
   nasel_punct,
 } = require("./helpers/msg");
-const { state } = require("./helpers/utils");
+const { state, subsidy } = require("./helpers/utils");
 const { TELEGRAM_BOT_TOKEN } = process.env;
 const bot = new Telegraf(process.env.BOT_TOKEN);
 let oktomo_code = {};
@@ -246,22 +229,22 @@ bot.on("text", (ctx) => {
 
 // запомнить значение 'Период'
 Object.keys(season_id).forEach((season) => {
-  bot.action(season, (ctx) => {
+  bot.action(season, async (ctx) => {
     ctx.deleteMessage();
     if (oktomo_code === null) {
-      ctx.reply("Начните опрос заново 👇");
+      await ctx.reply("Начните опрос заново 👇");
     } else {
       selected_season[ctx.chat.id] = season_id[season];
-      ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
+      await ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
       console.log(selected_season);
 
       if (selected_people[ctx.chat.id] > 5) {
         selected_people[ctx.chat.id] = 5;
       }
       if (selected_people[ctx.chat.id] === 1) {
-        ctx.reply(select_standard, num_standard_1);
+        await ctx.reply(select_standard, num_standard_1);
       } else {
-        ctx.reply(select_standard, num_standard);
+        await ctx.reply(select_standard, num_standard);
       }
     }
   });
@@ -391,38 +374,7 @@ bot.action("post", async (ctx) => {
 
     result = b && c && d;
 
-    async function subsidy(a, result, info) {
-      if (a == true) {
-        await ctx.reply("<b>Субсидия положена! 🟢</b>", { parse_mode: "html" });
-        await ctx.reply(
-          `<b>Субсидия равна: ${sum_subsidy.toFixed(2)} рублей</b>`,
-          {
-            parse_mode: "html",
-          }
-        );
-        await ctx.reply(info, { parse_mode: "html" });
-      } else {
-        if (result == true) {
-          await ctx.reply("<b>Субсидия положена! 🟢</b>", {
-            parse_mode: "html",
-          });
-          await ctx.reply(
-            `<b>Субсидия равна: ${sum_subsidy.toFixed(2)} рублей</b>`,
-            {
-              parse_mode: "html",
-            }
-          );
-          await ctx.reply(info, { parse_mode: "html" });
-        } else {
-          await ctx.reply("<b>Субсидия не положена! 🟠</b>", {
-            parse_mode: "html",
-          });
-          await ctx.reply(info, { parse_mode: "html" });
-        }
-      }
-    }
-
-    subsidy(a, result, info);
+    subsidy(a, result, info, ctx);
 
     console.log(a, b, c, d);
     console.log("Критерий: ", get_data.diffCriteria);

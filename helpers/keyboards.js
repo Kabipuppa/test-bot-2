@@ -75,76 +75,10 @@ const next_people_btn = {
   },
 };
 
-const num_people = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_work" }],
-    ],
-  },
-};
-
-const num_work = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_old" }],
-    ],
-  },
-};
-
-const num_old = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_kid" }],
-    ],
-  },
-};
-
-const num_kid = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_salary" }],
-    ],
-  },
-};
-
-const num_salary = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_jkh" }],
-    ],
-  },
-};
-
-const num_jkh = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_electric" }],
-    ],
-  },
-  parse_mode: "html",
-};
-
-const num_electric = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_benefit" }],
-    ],
-  },
-  parse_mode: "html",
-};
-
 const num_benefit = {
   reply_markup: {
     keyboard: [[{ text: "Да" }, { text: "Нет" }], [{ text: "« Отмена" }]],
     resize_keyboard: true,
-  },
-};
-
-const num_benefit_size = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_season" }],
-    ],
   },
 };
 
@@ -155,14 +89,6 @@ const num_season = {
         { text: "октябрь - март", callback_data: "hot_period" },
         { text: "апрель - сентябрь", callback_data: "cold_period" },
       ],
-    ],
-  },
-};
-
-const next_standard_btn = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "🟢 Следующий вопрос »", callback_data: "next_standard" }],
     ],
   },
 };
@@ -252,17 +178,8 @@ module.exports = {
   city_area,
   al_area,
   next_people_btn,
-  num_people,
-  num_work,
-  num_old,
-  num_kid,
-  num_salary,
-  num_jkh,
-  num_electric,
   num_benefit,
-  num_benefit_size,
   num_season,
-  next_standard_btn,
   num_standard,
   num_standard_1,
   post_btn,

@@ -19,4 +19,32 @@ function state(a, b, c, d, ctx, step, select_salary, select, x, y) {
     return (step = y);
   }
 }
-module.exports = { state };
+
+async function subsidy(a, result, info, ctx) {
+  if (a == true) {
+    await ctx.reply("<b>Субсидия положена! 🟢</b>", { parse_mode: "html" });
+    await ctx.reply(`<b>Субсидия равна: ${sum_subsidy.toFixed(2)} рублей</b>`, {
+      parse_mode: "html",
+    });
+    await ctx.reply(info);
+  } else {
+    if (result == true) {
+      await ctx.reply("<b>Субсидия положена! 🟢</b>", {
+        parse_mode: "html",
+      });
+      await ctx.reply(
+        `<b>Субсидия равна: ${sum_subsidy.toFixed(2)} рублей</b>`,
+        {
+          parse_mode: "html",
+        }
+      );
+      await ctx.reply(info);
+    } else {
+      await ctx.reply("<b>Субсидия не положена! 🟠</b>", {
+        parse_mode: "html",
+      });
+      await ctx.reply(info);
+    }
+  }
+}
+module.exports = { state, subsidy };
