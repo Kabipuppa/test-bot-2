@@ -19,7 +19,9 @@ const search = async (city, people, season) => {
     filterSearchDataArr = searchDataArr.filter(
       (item) =>
         item.seasonalityType.name === season &&
-        item.familiesNumber.number === people
+        item.familiesNumber.number === people &&
+        item.persons[0].name ===
+          "Собственники жилых помещений в многоквартирных домах, которые в соответствии с требованиями ЖК РФ обязаны вносить взносы на капитальный ремонт"
     );
     cases = filterSearchDataArr[0];
 

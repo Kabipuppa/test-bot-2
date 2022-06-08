@@ -2,11 +2,14 @@ require("dotenv").config();
 const { Telegraf, Extra } = require("telegraf");
 const util = require("util");
 const { search } = require("./helpers/api");
+const axios = require("axios");
 const {
   city_id,
   city_name,
   al_id,
   al_name,
+  as_id,
+  as_name,
   season_id,
   season_name,
   standard_id,
@@ -18,11 +21,9 @@ const {
   municipal_area,
   city_area,
   al_area,
-  next_people_btn,
+  as_area,
   num_benefit,
   num_season,
-  num_standard,
-  num_standard_1,
   post_btn,
 } = require("./helpers/keyboards");
 const {
@@ -44,6 +45,7 @@ const {
   select_season,
   select_standard,
   nasel_punct,
+  pls_wait,
 } = require("./helpers/msg");
 const { state, subsidy } = require("./helpers/utils");
 const { TELEGRAM_BOT_TOKEN } = process.env;
@@ -51,6 +53,7 @@ const bot = new Telegraf(process.env.BOT_TOKEN);
 let oktomo_code = {};
 let selected_city = {};
 let selected_al = {};
+let selected_as = {};
 let selected_people = {};
 let selected_work = {};
 let selected_old = {};
@@ -64,9 +67,9 @@ let selected_standard = {};
 let step = {};
 
 bot.start((ctx) => {
-  oktomo_code = null;
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
+  selected_as[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
   selected_work[ctx.chat.id] = null;
   selected_old[ctx.chat.id] = null;
@@ -77,14 +80,15 @@ bot.start((ctx) => {
   selected_benefit[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
+  step[ctx.chat.id] = null;
   ctx.reply(`Добро пожаловать ${ctx.chat.first_name}! 🙂`);
   ctx.reply(use_subsidy, start);
 });
 
-bot.hears("« Отмена", (ctx) => {
-  oktomo_code = null;
+bot.hears("В начало", (ctx) => {
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
+  selected_as[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
   selected_work[ctx.chat.id] = null;
   selected_old[ctx.chat.id] = null;
@@ -95,6 +99,7 @@ bot.hears("« Отмена", (ctx) => {
   selected_benefit[ctx.chat.id] = null;
   selected_season[ctx.chat.id] = null;
   selected_standard[ctx.chat.id] = null;
+  step[ctx.chat.id] = null;
   ctx.reply(cancel_caption, start);
 });
 
@@ -107,20 +112,58 @@ bot.hears("Муниципальный район", (ctx) => {
 });
 
 // обработка выбранной кнопки 'Алтайский'
-bot.action("al", (ctx) => {
+bot.action("al", async (ctx) => {
   ctx.deleteMessage();
   ctx.reply(nasel_punct, al_area);
 });
 
-// запомнить значение 'Алтайский'
 Object.keys(al_id).forEach((al) => {
-  bot.action(al, (ctx) => {
+  bot.action(al, async (ctx) => {
     ctx.deleteMessage();
     selected_al[ctx.chat.id] = al_id[al];
     oktomo_code = selected_al[ctx.chat.id];
-    ctx.reply(`Вы выбрали населенный пункт: ${al_name[al]}`, cancel_btn);
-    ctx.reply("Нажмите 👇", next_people_btn);
-    console.log("Насел.пункт: ", selected_al);
+    if (isNaN(selected_al[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${al_name[al]}`,
+        cancel_btn
+      );
+      // await ctx.reply("Нажмите 👇", next_people_btn);
+      await ctx.reply(select_people);
+      console.log("Насел.пункт: ", selected_al);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+// обработка выбранной кнопки 'Аскизский'
+bot.action("as", (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, as_area);
+});
+
+Object.keys(as_id).forEach((as) => {
+  bot.action(as, async (ctx) => {
+    selected_as[ctx.chat.id] = as_id[as];
+    oktomo_code = selected_as[ctx.chat.id];
+    console.log("октомо: ", oktomo_code);
+    if (isNaN(selected_as[ctx.chat.id]) === true) {
+      ctx.reply("Выберете город", {
+        parse_mode: "html",
+      });
+    } else {
+      ctx.deleteMessage();
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${as_name[as]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      console.log("Насел пункт: ", selected_as);
+      step[ctx.chat.id] = 1;
+    }
   });
 });
 
@@ -128,102 +171,186 @@ bot.hears("Городской округ", (ctx) => {
   ctx.reply(select_city, city_area);
 });
 
-// запомнить значение 'Городской округ'
 Object.keys(city_id).forEach((city) => {
   bot.action(city, async (ctx) => {
-    ctx.deleteMessage();
     selected_city[ctx.chat.id] = city_id[city];
     oktomo_code = selected_city[ctx.chat.id];
-    await ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
-    await ctx.reply(select_people);
-    console.log("город: ", selected_city);
-    step = 1;
+    if (isNaN(selected_city[ctx.chat.id]) === true) {
+      ctx.reply("Выберете город", {
+        parse_mode: "html",
+      });
+    } else {
+      ctx.deleteMessage();
+      await ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
+      await ctx.reply(select_people);
+      console.log("город: ", selected_city);
+      step[ctx.chat.id] = 1;
+    }
   });
 });
 
 bot.hears("Да", (ctx) => {
   ctx.deleteMessage();
   ctx.reply(select_benefit_size, cancel_btn);
-  step = 8;
+  step[ctx.chat.id] = 8;
 });
 
-bot.hears("Нет", (ctx) => {
+bot.hears("Нет", async (ctx) => {
   selected_benefit[ctx.chat.id] = 0;
   console.log("льгота: ", selected_benefit);
-  ctx.reply(select_season, cancel_btn);
-  ctx.reply("Нажмите 👇", num_season);
+  await ctx.reply(select_season, cancel_btn);
+  await ctx.reply("Нажмите 👇", num_season);
 });
 
 bot.on("text", (ctx) => {
-  if (step === 1) {
+  if (step[ctx.chat.id] === 1) {
     selected_people[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("люди:", selected_people);
-    ctx.reply(select_work);
-    step = 2;
-  } else if (step === 2) {
+    if (
+      isNaN(selected_people[ctx.chat.id]) === true ||
+      selected_people[ctx.chat.id] <= 0
+    ) {
+      ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
+        parse_mode: "html",
+      });
+      return (step[ctx.chat.id] = 1);
+    } else {
+      console.log("люди:", selected_people);
+      ctx.reply(select_work);
+      step[ctx.chat.id] = 2;
+    }
+  } else if (step[ctx.chat.id] === 2) {
     selected_work[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("работяги:", selected_work);
-    step = state(
-      selected_people[ctx.chat.id],
-      selected_work[ctx.chat.id],
-      0,
-      0,
-      ctx,
-      step,
-      select_salary,
-      select_old,
-      3,
-      2
-    );
-    console.log(step);
-  } else if (step === 3) {
+    if (
+      isNaN(selected_work[ctx.chat.id]) === true ||
+      selected_work[ctx.chat.id] < 0
+    ) {
+      ctx.reply("Введите положительное <b>число</b>:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 2;
+    } else {
+      console.log("работяги:", selected_work);
+      step[ctx.chat.id] = state(
+        selected_people[ctx.chat.id],
+        selected_work[ctx.chat.id],
+        0,
+        0,
+        ctx,
+        step[ctx.chat.id],
+        select_salary,
+        select_old,
+        3,
+        2
+      );
+    }
+  } else if (step[ctx.chat.id] === 3) {
     selected_old[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("старики:", selected_old);
-    step = state(
-      selected_people[ctx.chat.id],
-      selected_work[ctx.chat.id],
-      selected_old[ctx.chat.id],
-      0,
-      ctx,
-      step,
-      select_salary,
-      select_kid,
-      4,
-      3
-    );
-  } else if (step === 4) {
+    if (
+      isNaN(selected_old[ctx.chat.id]) === true ||
+      selected_old[ctx.chat.id] < 0
+    ) {
+      ctx.reply("Введите положительное <b>число</b>:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 3;
+    } else {
+      console.log("старики:", selected_old);
+      step[ctx.chat.id] = state(
+        selected_people[ctx.chat.id],
+        selected_work[ctx.chat.id],
+        selected_old[ctx.chat.id],
+        0,
+        ctx,
+        step[ctx.chat.id],
+        select_salary,
+        select_kid,
+        4,
+        3
+      );
+    }
+  } else if (step[ctx.chat.id] === 4) {
     selected_kid[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("дети:", selected_old);
-    step = state(
-      selected_people[ctx.chat.id],
-      selected_work[ctx.chat.id],
-      selected_old[ctx.chat.id],
-      selected_kid[ctx.chat.id],
-      ctx,
-      step,
-      select_salary,
-      select_salary,
-      5,
-      4
-    );
-  } else if (step === 5) {
+    if (
+      isNaN(selected_kid[ctx.chat.id]) === true ||
+      selected_kid[ctx.chat.id] < 0
+    ) {
+      ctx.reply("Введите положительное <b>число</b>:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 4;
+    } else {
+      console.log("дети:", selected_old);
+      step[ctx.chat.id] = state(
+        selected_people[ctx.chat.id],
+        selected_work[ctx.chat.id],
+        selected_old[ctx.chat.id],
+        selected_kid[ctx.chat.id],
+        ctx,
+        step[ctx.chat.id],
+        select_salary,
+        select_salary,
+        5,
+        4
+      );
+    }
+  } else if (step[ctx.chat.id] === 5) {
     selected_salary[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("зп:", selected_salary);
-    ctx.reply(select_jkh);
-    step = 6;
-  } else if (step === 6) {
+    if (
+      isNaN(selected_salary[ctx.chat.id]) === true ||
+      selected_salary[ctx.chat.id] <= 0
+    ) {
+      ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 5;
+    } else {
+      console.log("зп:", selected_salary);
+      ctx.reply(select_jkh);
+      step[ctx.chat.id] = 6;
+    }
+  } else if (step[ctx.chat.id] === 6) {
     selected_jkh[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("жкх:", selected_jkh);
-    ctx.reply(select_electric);
-    step = 7;
-  } else if (step === 7) {
+    if (
+      isNaN(selected_jkh[ctx.chat.id]) === true ||
+      selected_jkh[ctx.chat.id] <= 0
+    ) {
+      ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 6;
+    } else {
+      console.log("жкх:", selected_jkh);
+      ctx.reply(select_electric);
+      step[ctx.chat.id] = 7;
+    }
+  } else if (step[ctx.chat.id] === 7) {
     selected_electric[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("электричество':", selected_electric);
-    ctx.reply(select_benefit, num_benefit);
-  } else if (step === 8) {
+    if (
+      isNaN(selected_electric[ctx.chat.id]) === true ||
+      selected_electric[ctx.chat.id] <= 0
+    ) {
+      ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 7;
+    } else {
+      console.log("электричество':", selected_electric);
+      ctx.reply(select_benefit, num_benefit); // не выводит клаву вот здесь
+    }
+  } else if (step[ctx.chat.id] === 8) {
     selected_benefit[ctx.chat.id] = parseInt(ctx.message.text);
-    console.log("размер льготы:", selected_benefit);
-    ctx.reply(select_season, num_season);
+    if (
+      isNaN(selected_benefit[ctx.chat.id]) === true ||
+      selected_benefit[ctx.chat.id] <= 0
+    ) {
+      ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
+        parse_mode: "html",
+      });
+      step[ctx.chat.id] = 8;
+    } else {
+      console.log("размер льготы:", selected_benefit);
+      ctx.reply(select_season, num_season);
+    }
   }
 });
 
@@ -232,20 +359,46 @@ Object.keys(season_id).forEach((season) => {
   bot.action(season, async (ctx) => {
     ctx.deleteMessage();
     if (oktomo_code === null) {
-      await ctx.reply("Начните опрос заново 👇");
+      await ctx.reply(cancel_caption);
     } else {
       selected_season[ctx.chat.id] = season_id[season];
       await ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
+      await ctx.reply(pls_wait, { parse_mode: "HTML" });
       console.log(selected_season);
 
       if (selected_people[ctx.chat.id] > 5) {
         selected_people[ctx.chat.id] = 5;
       }
-      if (selected_people[ctx.chat.id] === 1) {
-        await ctx.reply(select_standard, num_standard_1);
-      } else {
-        await ctx.reply(select_standard, num_standard);
+      let arr_length = {};
+      let num = [];
+      let arr_data = [];
+      let arr_btn = [];
+      let split_arr = [];
+      let chunk_arr = [];
+      const data = await search(
+        oktomo_code,
+        selected_people[ctx.chat.id],
+        selected_season[ctx.chat.id]
+      );
+      num = data.rates;
+      arr_length = num.length;
+      for (var i = 0; i < arr_length; i++) {
+        arr_data[i] = data.rates[i];
+        split_arr[i] = arr_data[i].diffCriteria.split(" ");
+        chunk_arr[i] = split_arr[i].slice(4);
+        arr_btn[i] = chunk_arr[i].join(" ");
       }
+      await ctx.reply(select_standard, {
+        // создать клаву со стандартами
+        reply_markup: JSON.stringify({
+          inline_keyboard: arr_btn.map((x, xi) => [
+            {
+              text: x,
+              callback_data: String(xi),
+            },
+          ]),
+        }),
+      });
     }
   });
 });
@@ -255,135 +408,57 @@ Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, async (ctx) => {
     ctx.deleteMessage();
     if (oktomo_code === null) {
-      ctx.reply("Начните опрос заново 👇");
+      ctx.reply(cancel_caption);
     } else {
       selected_standard[ctx.chat.id] = standard_id[standard];
-      await ctx.reply(
-        `Вы выбрали стандарт: ${standard_id[standard]}`,
-        cancel_btn
-      );
       await ctx.reply("Нажмите 👇", post_btn);
       console.log(selected_standard);
     }
   });
 });
 
-// кнопка отправить POST
 bot.action("post", async (ctx) => {
   ctx.deleteMessage();
   if (oktomo_code === null) {
-    ctx.reply("Начните опрос заново 👇");
+    ctx.reply(cancel_caption);
   } else {
-    ctx.reply("Пожалуйста подождите . . .");
     const data = await search(
       oktomo_code,
       selected_people[ctx.chat.id],
       selected_season[ctx.chat.id]
     );
-    let x = {};
-    let get_data = [];
-    let arr_data = [];
-    let word_mas = [];
-    let chunk_arr = [];
-    let word_for_many = [
-      ["продолжительности", "периода"],
-      ["12", "года"],
-      ["печным", "отоплением"],
-    ];
-    let word_for_one = [
-      ["отопительного", "33"],
-      ["отопительного", "42"],
-      ["12", "33"],
-      ["12", "42"],
-      ["печным", "33"],
-      ["печным", "42"],
-    ];
+    get_data = data.rates[selected_standard[ctx.chat.id]];
+    let Dmax = {};
+    let S = {};
 
-    if (selected_people[ctx.chat.id] > 1) {
-      x = 3;
-      chunk_arr = word_for_many[selected_standard[ctx.chat.id]].slice(0, 3);
-    } else if (selected_people[ctx.chat.id] === 1) {
-      x = 6;
-      chunk_arr = word_for_one[selected_standard[ctx.chat.id]].slice(0, 3);
-    }
-    console.log(chunk_arr);
-
-    for (var i = 0; i < x; i++) {
-      arr_data[i] = data.rates[i];
-      word_mas[i] = arr_data[i].diffCriteria.split(" ");
-      console.log(
-        word_mas[i].includes(chunk_arr[0]) && word_mas[i].includes(chunk_arr[1])
-      );
-    }
-    console.log(word_mas);
-
-    if (
-      word_mas[0].includes(chunk_arr[0]) &&
-      word_mas[0].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[0];
-    } else if (
-      word_mas[1].includes(chunk_arr[0]) &&
-      word_mas[1].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[1];
-    } else if (
-      word_mas[2].includes(chunk_arr[0]) &&
-      word_mas[2].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[2];
-    } else if (
-      word_mas[3].includes(chunk_arr[0]) &&
-      word_mas[3].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[3];
-    } else if (
-      word_mas[4].includes(chunk_arr[0]) &&
-      word_mas[4].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[4];
-    } else if (
-      word_mas[5].includes(chunk_arr[0]) &&
-      word_mas[5].includes(chunk_arr[1]) === true
-    ) {
-      get_data = data.rates[5];
-    }
-
-    console.log(get_data.diffCriteria);
-    console.log(get_data.value);
-
-    jku = get_data.value * selected_people[ctx.chat.id]; // жку
-    jkh_total = // жкх итого
+    rs = get_data.value * selected_people[ctx.chat.id]; // Регион стандарт
+    sd = selected_salary[ctx.chat.id] / 6; // совоокупный доход семьи
+    pm = // прожиточный минимум
+      selected_work[ctx.chat.id] * 13026 +
+      selected_old[ctx.chat.id] * 10277 +
+      selected_kid[ctx.chat.id] * 11592;
+    pm_sr = pm / selected_people[ctx.chat.id];
+    jkh = // жкх сумма
       selected_jkh[ctx.chat.id] +
       selected_electric[ctx.chat.id] -
       selected_benefit[ctx.chat.id];
-    total_family_sum = selected_salary[ctx.chat.id] / 6; // совоокупный доход
-    pm = // прожиточный минимумыы
-      selected_work[ctx.chat.id] * 12702 +
-      selected_old[ctx.chat.id] * 10022 +
-      selected_kid[ctx.chat.id] * 11303;
-    max_costs = (total_family_sum / pm) * 0.12 * total_family_sum; // макс.допуст.расх
 
-    // Размер субсидии = Расходы на ЖКХ (ИТОГО)  - Максимально допустимая доля расходов 12%
-    sum_subsidy = jkh_total - max_costs * 0.12;
+    if (sd > pm) {
+      Dmax = 0.22 * sd;
+      subsidy(S, rs, Dmax, jkh, ctx, info);
+    } else if (sd < pm) {
+      Dmax = (sd / pm_sr) * 0.1 * sd;
+      subsidy(S, rs, Dmax, jkh, ctx, info);
+    }
 
-    a = jkh_total > max_costs;
-    b = total_family_sum > pm;
-    c = jkh_total >= (0.22 * total_family_sum) / 6;
-    d = jku - (0.22 * total_family_sum) / 6 > 0;
-
-    result = b && c && d;
-
-    subsidy(a, result, info, ctx);
-
-    console.log(a, b, c, d);
     console.log("Критерий: ", get_data.diffCriteria);
-    console.log("Значение критерия: ", get_data.value);
-    console.log("Значение ЖКУ равно: ", jku);
-    console.log("ЖКХ итого:", jkh_total);
-    console.log("Совокупный доход:", total_family_sum);
-    console.log("ПМ:", pm);
-    console.log("макс.доля.расх:", max_costs);
+    console.log("Регион стандарт: ", rs);
+    console.log("Совокупный доход:", sd);
+    console.log("Прожиточный минимум:", pm);
+    console.log("Прожиточный минимум средний:", pm_sr);
+    console.log("ЖКХ:", jkh);
+    console.log("Дmax", Dmax);
+    console.log("Субсидия", S);
   }
 });
 

@@ -38,6 +38,40 @@ const al_name = {
   Podsineye: "Подсинее",
 };
 
+const as_id = {
+  rp_Askiz: "95608151",
+  rp_Biscamzha: "95608165",
+  rp_Thei: "95608169",
+  s_Askiz: "95608405",
+  s_Balyksa: "95608409",
+  Lower_Base: "95608410",
+  Beltirskoe: "95608412",
+  Birikchul: "95608413",
+  Upper_Askiz: "95608415",
+  Poltakov: "95608420",
+  Kyzlas: "95608430",
+  Pulancol: "95608440",
+  Ust_Kamyshta: "95608450",
+  Ust_Chul: "95608455",
+};
+
+const as_name = {
+  rp_Askiz: "рп Аскиз",
+  rp_Biscamzha: "рп Бискамжа",
+  rp_Thei: "рп Вершина Теи",
+  s_Askiz: "с Аскиз",
+  s_Balyksa: "с Балыкса",
+  Lower_Base: "с Нижняя База",
+  Beltirskoe: "с Бельтирское",
+  Birikchul: "с Бирикчуль",
+  Upper_Askiz: "с Верх-Аскиз",
+  Poltakov: "с Полтаков",
+  Kyzlas: "с Кызлас",
+  Pulancol: "с Пуланколь",
+  Ust_Kamyshta: "с Усть-Камышта",
+  Ust_Chul: "с Усть-Чуль",
+};
+
 const season_id = {
   hot_period: "В отопительный период",
   cold_period: "Вне отопительного периода",
@@ -49,12 +83,12 @@ const season_name = {
 };
 
 const standard_id = {
-  a: 0,
-  b: 1,
-  c: 2,
-  d: 3,
-  e: 4,
-  f: 5,
+  0: 0,
+  1: 1,
+  2: 2,
+  3: 3,
+  4: 4,
+  5: 5,
 };
 
 module.exports = {
@@ -62,6 +96,8 @@ module.exports = {
   city_name,
   al_id,
   al_name,
+  as_id,
+  as_name,
   season_id,
   season_name,
   standard_id,

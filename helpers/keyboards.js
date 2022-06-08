@@ -8,7 +8,7 @@ const start = {
 
 const cancel_btn = {
   reply_markup: {
-    keyboard: [[{ text: "« Отмена" }]],
+    keyboard: [[{ text: "В начало" }]],
     resize_keyboard: true,
   },
 };
@@ -18,7 +18,7 @@ const main_menu = {
     keyboard: [
       [{ text: "Муниципальный район" }],
       [{ text: "Городской округ" }],
-      [{ text: "« Отмена" }],
+      [{ text: "В начало" }],
     ],
     resize_keyboard: true,
   },
@@ -29,12 +29,12 @@ const municipal_area = {
     inline_keyboard: [
       [{ text: "Алтайский", callback_data: "al" }],
       [{ text: "Аскизский", callback_data: "as" }],
-      [{ text: "Бейский", callback_data: "be" }],
-      [{ text: "Боградский", callback_data: "bo" }],
-      [{ text: "Орджоникидзевский", callback_data: "or" }],
-      [{ text: "Таштыпский", callback_data: "ta" }],
-      [{ text: "Усть-Абаканский", callback_data: "ya" }],
-      [{ text: "Ширинский", callback_data: "sr" }],
+      // [{ text: "Бейский", callback_data: "be" }],
+      // [{ text: "Боградский", callback_data: "bo" }],
+      // [{ text: "Орджоникидзевский", callback_data: "or" }],
+      // [{ text: "Таштыпский", callback_data: "ta" }],
+      // [{ text: "Усть-Абаканский", callback_data: "ya" }],
+      // [{ text: "Ширинский", callback_data: "sr" }],
     ],
   },
 };
@@ -45,12 +45,33 @@ const al_area = {
       [{ text: "Аршаново", callback_data: "Arshanovo" }],
       [{ text: "Белый Яр", callback_data: "BelyyYar" }],
       [{ text: "Изыхские Копи", callback_data: "Izykhskiye" }],
-      [{ text: "Кирово", callback_data: "Kirovo" }],
+      // [{ text: "Кирово", callback_data: "Kirovo" }],
       [{ text: "Краснополье", callback_data: "Krasno" }],
       [{ text: "Новомихайловка", callback_data: "Novomikh" }],
       [{ text: "Новороссийское", callback_data: "Novoros" }],
       [{ text: "Очуры", callback_data: "Ochury" }],
       [{ text: "Подсинее", callback_data: "Podsineye" }],
+    ],
+  },
+};
+
+const as_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "рп Аскиз", callback_data: "rp_Askiz" }],
+      [{ text: "рп Бискамжа", callback_data: "rp_Biscamzha" }],
+      [{ text: "рп Вершина Теи", callback_data: "rp_Thei" }],
+      [{ text: "с Аскиз", callback_data: "s_Askiz" }],
+      // [{ text: "с Балыкса", callback_data: "s_Balyksa" }],
+      [{ text: "с Нижняя База", callback_data: "Lower_Base" }],
+      [{ text: "с Бельтирское", callback_data: "Beltirskoe" }],
+      [{ text: "с Бирикчуль", callback_data: "Birikchul" }],
+      [{ text: "с Верх-Аскиз", callback_data: "Upper_Askiz" }],
+      [{ text: "с Полтаков", callback_data: "Poltakov" }],
+      [{ text: "с Кызлас", callback_data: "Kyzlas" }],
+      // [{ text: "с Пуланколь", callback_data: "Pulancol" }],
+      [{ text: "с Усть-Камышта", callback_data: "Ust_Kamyshta" }],
+      [{ text: "с Усть-Чуль", callback_data: "Ust_Chul" }],
     ],
   },
 };
@@ -63,14 +84,6 @@ const city_area = {
       [{ text: "Саяногорск", callback_data: "Sayanogorsk" }],
       [{ text: "Сорск", callback_data: "Sorsk" }],
       [{ text: "Черногорск", callback_data: "Chernogorsk" }],
-    ],
-  },
-};
-
-const next_people_btn = {
-  reply_markup: {
-    inline_keyboard: [
-      [{ text: "Следующий вопрос", callback_data: "next_people" }],
     ],
   },
 };
@@ -93,74 +106,6 @@ const num_season = {
   },
 };
 
-const num_standard = {
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: "С учетом продолжительности отопительного периода",
-          callback_data: "a",
-        },
-      ],
-      [
-        {
-          text: "Из расчета 12 месяцев календарного года",
-          callback_data: "b",
-        },
-      ],
-      [
-        {
-          text: "За жилые помещения с печным отоплением",
-          callback_data: "c",
-        },
-      ],
-    ],
-  },
-};
-
-const num_standard_1 = {
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: "С учетом продолжительности отопительного периода 33 кв.м",
-          callback_data: "a",
-        },
-      ],
-      [
-        {
-          text: "С учетом продолжительности отопительного периода 42 кв.м",
-          callback_data: "b",
-        },
-      ],
-      [
-        {
-          text: "Из расчета 12 месяцев календарного года 33 кв.м",
-          callback_data: "c",
-        },
-      ],
-      [
-        {
-          text: "Из расчета 12 месяцев календарного года 42 кв.м",
-          callback_data: "d",
-        },
-      ],
-      [
-        {
-          text: "За жилые помещения с печным отоплением 33 кв.м",
-          callback_data: "e",
-        },
-      ],
-      [
-        {
-          text: "За жилые помещения с печным отоплением 42 кв.м",
-          callback_data: "f",
-        },
-      ],
-    ],
-  },
-};
-
 const post_btn = {
   reply_markup: {
     inline_keyboard: [
@@ -177,10 +122,8 @@ module.exports = {
   municipal_area,
   city_area,
   al_area,
-  next_people_btn,
+  as_area,
   num_benefit,
   num_season,
-  num_standard,
-  num_standard_1,
   post_btn,
 };
