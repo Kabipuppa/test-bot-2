@@ -131,9 +131,8 @@ Object.keys(al_id).forEach((al) => {
         `Вы выбрали населенный пункт: ${al_name[al]}`,
         cancel_btn
       );
-      // await ctx.reply("Нажмите 👇", next_people_btn);
       await ctx.reply(select_people);
-      console.log("Насел.пункт: ", selected_al);
+      // console.log("Насел.пункт: ", selected_al);
       step[ctx.chat.id] = 1;
     }
   });
@@ -149,7 +148,7 @@ Object.keys(as_id).forEach((as) => {
   bot.action(as, async (ctx) => {
     selected_as[ctx.chat.id] = as_id[as];
     oktomo_code = selected_as[ctx.chat.id];
-    console.log("октомо: ", oktomo_code);
+    // console.log("октомо: ", oktomo_code);
     if (isNaN(selected_as[ctx.chat.id]) === true) {
       ctx.reply("Выберете город", {
         parse_mode: "html",
@@ -161,7 +160,7 @@ Object.keys(as_id).forEach((as) => {
         cancel_btn
       );
       await ctx.reply(select_people);
-      console.log("Насел пункт: ", selected_as);
+      // console.log("Насел пункт: ", selected_as);
       step[ctx.chat.id] = 1;
     }
   });
@@ -183,7 +182,7 @@ Object.keys(city_id).forEach((city) => {
       ctx.deleteMessage();
       await ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
       await ctx.reply(select_people);
-      console.log("город: ", selected_city);
+      // console.log("город: ", selected_city);
       step[ctx.chat.id] = 1;
     }
   });
@@ -197,7 +196,7 @@ bot.hears("Да", (ctx) => {
 
 bot.hears("Нет", async (ctx) => {
   selected_benefit[ctx.chat.id] = 0;
-  console.log("льгота: ", selected_benefit);
+  // console.log("льгота: ", selected_benefit);
   await ctx.reply(select_season, cancel_btn);
   await ctx.reply("Нажмите 👇", num_season);
 });
@@ -214,7 +213,7 @@ bot.on("text", (ctx) => {
       });
       return (step[ctx.chat.id] = 1);
     } else {
-      console.log("люди:", selected_people);
+      // console.log("люди:", selected_people);
       ctx.reply(select_work);
       step[ctx.chat.id] = 2;
     }
@@ -229,7 +228,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 2;
     } else {
-      console.log("работяги:", selected_work);
+      // console.log("работяги:", selected_work);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -254,7 +253,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 3;
     } else {
-      console.log("старики:", selected_old);
+      // console.log("старики:", selected_old);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -279,7 +278,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 4;
     } else {
-      console.log("дети:", selected_old);
+      // console.log("дети:", selected_old);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -304,7 +303,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 5;
     } else {
-      console.log("зп:", selected_salary);
+      // console.log("зп:", selected_salary);
       ctx.reply(select_jkh);
       step[ctx.chat.id] = 6;
     }
@@ -319,7 +318,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 6;
     } else {
-      console.log("жкх:", selected_jkh);
+      // console.log("жкх:", selected_jkh);
       ctx.reply(select_electric);
       step[ctx.chat.id] = 7;
     }
@@ -334,8 +333,8 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 7;
     } else {
-      console.log("электричество':", selected_electric);
-      ctx.reply(select_benefit, num_benefit); // не выводит клаву вот здесь
+      // console.log("электричество':", selected_electric);
+      ctx.reply(select_benefit, num_benefit);
     }
   } else if (step[ctx.chat.id] === 8) {
     selected_benefit[ctx.chat.id] = parseInt(ctx.message.text);
@@ -348,7 +347,7 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 8;
     } else {
-      console.log("размер льготы:", selected_benefit);
+      // console.log("размер льготы:", selected_benefit);
       ctx.reply(select_season, num_season);
     }
   }
@@ -364,39 +363,30 @@ Object.keys(season_id).forEach((season) => {
       selected_season[ctx.chat.id] = season_id[season];
       await ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
       await ctx.reply(pls_wait, { parse_mode: "HTML" });
-      console.log(selected_season);
+      // console.log(selected_season);
 
       if (selected_people[ctx.chat.id] > 5) {
         selected_people[ctx.chat.id] = 5;
       }
-      let arr_length = {};
-      let num = [];
-      let arr_data = [];
-      let arr_btn = [];
-      let split_arr = [];
-      let chunk_arr = [];
+
       const data = await search(
         oktomo_code,
         selected_people[ctx.chat.id],
         selected_season[ctx.chat.id]
       );
-      num = data.rates;
-      arr_length = num.length;
-      for (var i = 0; i < arr_length; i++) {
-        arr_data[i] = data.rates[i];
-        split_arr[i] = arr_data[i].diffCriteria.split(" ");
-        chunk_arr[i] = split_arr[i].slice(4);
-        arr_btn[i] = chunk_arr[i].join(" ");
-      }
+
+      const keyboard = data.rates
+        .map((r) => r.diffCriteria.split(" ").slice(4).join(" "))
+        .map((x, xi) => [
+          {
+            text: x,
+            callback_data: String(xi),
+          },
+        ]);
+
       await ctx.reply(select_standard, {
-        // создать клаву со стандартами
         reply_markup: JSON.stringify({
-          inline_keyboard: arr_btn.map((x, xi) => [
-            {
-              text: x,
-              callback_data: String(xi),
-            },
-          ]),
+          inline_keyboard: keyboard,
         }),
       });
     }
@@ -412,7 +402,7 @@ Object.keys(standard_id).forEach((standard) => {
     } else {
       selected_standard[ctx.chat.id] = standard_id[standard];
       await ctx.reply("Нажмите 👇", post_btn);
-      console.log(selected_standard);
+      // console.log(selected_standard);
     }
   });
 });
@@ -450,15 +440,15 @@ bot.action("post", async (ctx) => {
       Dmax = (sd / pm_sr) * 0.1 * sd;
       subsidy(S, rs, Dmax, jkh, ctx, info);
     }
-
+    console.log("стандарт: ", get_data.value);
     console.log("Критерий: ", get_data.diffCriteria);
-    console.log("Регион стандарт: ", rs);
-    console.log("Совокупный доход:", sd);
-    console.log("Прожиточный минимум:", pm);
-    console.log("Прожиточный минимум средний:", pm_sr);
-    console.log("ЖКХ:", jkh);
-    console.log("Дmax", Dmax);
-    console.log("Субсидия", S);
+    // console.log("Регион стандарт: ", rs);
+    // console.log("Совокупный доход:", sd);
+    // console.log("Прожиточный минимум:", pm);
+    // console.log("Прожиточный минимум средний:", pm_sr);
+    // console.log("ЖКХ:", jkh);
+    // console.log("Дmax", Dmax);
+    // console.log("Субсидия", S);
   }
 });
 

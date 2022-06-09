@@ -20,15 +20,6 @@ function state(a, b, c, d, ctx, step, select_salary, select, x, y) {
   }
 }
 
-// function number_check(selected, ctx, x) {
-//   if (isNaN(selected) === true || selected <= 0) {
-//     ctx.reply("Введите число <b>цифрой</b> больше нуля:", {
-//       parse_mode: "html",
-//     });
-//     return (step = x);
-//   }
-// }
-
 async function subsidy(S, rs, Dmax, jkh, ctx, info) {
   if (rs - Dmax > 0) {
     S = rs - Dmax; // субсидия
@@ -40,7 +31,7 @@ async function subsidy(S, rs, Dmax, jkh, ctx, info) {
         parse_mode: "html",
       });
       await ctx.reply(info);
-      console.log(S);
+      // console.log(S);
     } else {
       S = jkh;
       await ctx.reply("<b>Субсидия положена! 🟢</b>", {
@@ -50,14 +41,14 @@ async function subsidy(S, rs, Dmax, jkh, ctx, info) {
         parse_mode: "html",
       });
       await ctx.reply(info);
-      console.log(S);
+      // console.log(S);
     }
   } else {
     await ctx.reply("<b>Субсидия не положена! 🟠</b>", {
       parse_mode: "html",
     });
     await ctx.reply(info);
-    console.log(S);
+    // console.log(S);
   }
 }
 
