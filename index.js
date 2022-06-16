@@ -94,6 +94,7 @@ let selected_standard = {};
 let step = {};
 
 bot.start((ctx) => {
+  oktomo_code[ctx.chat.id] = null;
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_as[ctx.chat.id] = null;
@@ -119,6 +120,7 @@ bot.start((ctx) => {
 });
 
 bot.hears("В начало", (ctx) => {
+  oktomo_code[ctx.chat.id] = null;
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_as[ctx.chat.id] = null;
@@ -159,7 +161,7 @@ Object.keys(al_id).forEach((al) => {
   bot.action(al, async (ctx) => {
     ctx.deleteMessage();
     selected_al[ctx.chat.id] = al_id[al];
-    oktomo_code = selected_al[ctx.chat.id];
+    oktomo_code[ctx.chat.id] = selected_al[ctx.chat.id];
     if (isNaN(selected_al[ctx.chat.id]) === true) {
       ctx.reply("Выберете населенный пункт", {
         parse_mode: "html",
@@ -183,7 +185,7 @@ bot.action("as", (ctx) => {
 Object.keys(as_id).forEach((as) => {
   bot.action(as, async (ctx) => {
     selected_as[ctx.chat.id] = as_id[as];
-    oktomo_code = selected_as[ctx.chat.id];
+    oktomo_code[ctx.chat.id] = selected_as[ctx.chat.id];
     if (isNaN(selected_as[ctx.chat.id]) === true) {
       ctx.reply("Выберете город", {
         parse_mode: "html",
@@ -209,7 +211,7 @@ Object.keys(bei_id).forEach((bei) => {
   bot.action(bei, async (ctx) => {
     ctx.deleteMessage();
     selected_bei[ctx.chat.id] = bei_id[bei];
-    oktomo_code = selected_bei[ctx.chat.id];
+    oktomo_code[ctx.chat.id] = selected_bei[ctx.chat.id];
     if (isNaN(selected_bei[ctx.chat.id]) === true) {
       ctx.reply("Выберете населенный пункт", {
         parse_mode: "html",
@@ -232,7 +234,7 @@ bot.hears("Городской округ", (ctx) => {
 Object.keys(city_id).forEach((city) => {
   bot.action(city, async (ctx) => {
     selected_city[ctx.chat.id] = city_id[city];
-    oktomo_code = selected_city[ctx.chat.id];
+    oktomo_code[ctx.chat.id] = selected_city[ctx.chat.id];
     if (isNaN(selected_city[ctx.chat.id]) === true) {
       ctx.reply("Выберете город", {
         parse_mode: "html",
@@ -405,7 +407,7 @@ bot.on("text", (ctx) => {
 Object.keys(season_id).forEach((season) => {
   bot.action(season, async (ctx) => {
     ctx.deleteMessage();
-    if (oktomo_code === null) {
+    if (oktomo_code[ctx.chat.id] === null) {
       await ctx.reply(cancel_caption);
     } else {
       selected_season[ctx.chat.id] = season_id[season];
@@ -417,7 +419,7 @@ Object.keys(season_id).forEach((season) => {
       }
 
       const data = await search(
-        oktomo_code,
+        oktomo_code[ctx.chat.id],
         selected_people[ctx.chat.id],
         selected_season[ctx.chat.id]
       );
@@ -443,7 +445,7 @@ Object.keys(season_id).forEach((season) => {
 Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, async (ctx) => {
     ctx.deleteMessage();
-    if (oktomo_code === null) {
+    if (oktomo_code[ctx.chat.id] === null) {
       ctx.reply(cancel_caption);
     } else {
       selected_standard[ctx.chat.id] = standard_id[standard];
@@ -454,11 +456,11 @@ Object.keys(standard_id).forEach((standard) => {
 
 bot.action("post", async (ctx) => {
   ctx.deleteMessage();
-  if (oktomo_code === null) {
+  if (oktomo_code[ctx.chat.id] === null) {
     ctx.reply(cancel_caption);
   } else {
     const data = await search(
-      oktomo_code,
+      oktomo_code[ctx.chat.id],
       selected_people[ctx.chat.id],
       selected_season[ctx.chat.id]
     );
@@ -486,7 +488,7 @@ bot.action("post", async (ctx) => {
       subsidy(S, rs, Dmax, jkh, ctx, info);
     }
   }
-  console.log(pm);
+  // console.log(pm);
 });
 
 bot.launch();
