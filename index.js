@@ -227,6 +227,131 @@ Object.keys(bei_id).forEach((bei) => {
   });
 });
 
+bot.action("bog", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, bog_area);
+});
+
+Object.keys(bog_id).forEach((bog) => {
+  bot.action(bog, async (ctx) => {
+    ctx.deleteMessage();
+    selected_bog[ctx.chat.id] = bog_id[bog];
+    oktomo_code[ctx.chat.id] = selected_bog[ctx.chat.id];
+    if (isNaN(selected_bog[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${bog_name[bog]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+bot.action("ord", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, ord_area);
+});
+
+Object.keys(ord_id).forEach((ord) => {
+  bot.action(ord, async (ctx) => {
+    ctx.deleteMessage();
+    selected_ord[ctx.chat.id] = ord_id[ord];
+    oktomo_code[ctx.chat.id] = selected_ord[ctx.chat.id];
+    if (isNaN(selected_ord[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${ord_name[ord]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+bot.action("tash", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, tash_area);
+});
+
+Object.keys(tash_id).forEach((tash) => {
+  bot.action(tash, async (ctx) => {
+    ctx.deleteMessage();
+    selected_tash[ctx.chat.id] = tash_id[tash];
+    oktomo_code[ctx.chat.id] = selected_tash[ctx.chat.id];
+    if (isNaN(selected_tash[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${tash_name[tash]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+bot.action("ust", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, ust_area);
+});
+
+Object.keys(ust_id).forEach((ust) => {
+  bot.action(ust, async (ctx) => {
+    ctx.deleteMessage();
+    selected_ust[ctx.chat.id] = ust_id[ust];
+    oktomo_code[ctx.chat.id] = selected_ust[ctx.chat.id];
+    if (isNaN(selected_ust[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${ust_name[ust]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+bot.action("shir", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, shir_area);
+});
+
+Object.keys(shir_id).forEach((shir) => {
+  bot.action(shir, async (ctx) => {
+    ctx.deleteMessage();
+    selected_shir[ctx.chat.id] = shir_id[shir];
+    oktomo_code[ctx.chat.id] = selected_shir[ctx.chat.id];
+    if (isNaN(selected_shir[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${shir_name[shir]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
 bot.hears("Городской округ", (ctx) => {
   ctx.reply(select_city, city_area);
 });

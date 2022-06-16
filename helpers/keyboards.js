@@ -30,11 +30,11 @@ const municipal_area = {
       [{ text: "Алтайский", callback_data: "al" }],
       [{ text: "Аскизский", callback_data: "as" }],
       [{ text: "Бейский", callback_data: "bei" }],
-      // [{ text: "Боградский", callback_data: "bog" }],
-      // [{ text: "Орджоникидзевский", callback_data: "ord" }],
-      // [{ text: "Таштыпский", callback_data: "tash" }],
-      // [{ text: "Усть-Абаканский", callback_data: "ust" }],
-      // [{ text: "Ширинский", callback_data: "srir" }],
+      [{ text: "Боградский", callback_data: "bog" }],
+      [{ text: "Орджоникидзевский", callback_data: "ord" }],
+      [{ text: "Таштыпский", callback_data: "tash" }],
+      [{ text: "Усть-Абаканский", callback_data: "ust" }],
+      [{ text: "Ширинский", callback_data: "shir" }],
     ],
   },
 };
@@ -139,9 +139,47 @@ const tash_area = {
   },
 };
 
-const ust_area = {};
+const ust_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "рп Усть-Абакан", callback_data: "rp_Ust_Abakan" }],
+      [{ text: "с Вершино-Биджа", callback_data: "s_Vershino_Bidzha" }],
+      [{ text: "с Весеннее", callback_data: "s_Vesenneye" }],
+      [{ text: "аал Доможаков", callback_data: "aal_Domozhakov" }],
+      [{ text: "с Калинино", callback_data: "s_Kalinino" }],
+      [{ text: "с Московское", callback_data: "s_Moskovskoye" }],
+      [{ text: "с Зеленое", callback_data: "s_Zelenoye" }],
+      [{ text: "аал Райков", callback_data: "aal_Raykov" }],
+      [{ text: "п Расцвет", callback_data: "p_Rastsvet" }],
+      [{ text: "аал Сапогов", callback_data: "aal_Sapogov" }],
+      [{ text: "с Солнечное", callback_data: "s_Solnechnoye" }],
+      [{ text: "с Усть-Бюр", callback_data: "s_Ust_Byur" }],
+      [{ text: "аал Чарков", callback_data: "aal_Charkov" }],
+    ],
+  },
+};
 
-const shir_area = {};
+const shir_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "с Коммунар", callback_data: "s_Kommunar" }],
+      [{ text: "с Туим", callback_data: "s_Tuim" }],
+      [{ text: "с Шира", callback_data: "s_Shira" }],
+      [{ text: "п Беренжак", callback_data: "p_Berenzhak" }],
+      [{ text: "с Борец", callback_data: "s_Borets" }],
+      [{ text: "с Ворота", callback_data: "s_Vorota" }],
+      [{ text: "с Джирим", callback_data: "s_Dzhirim" }],
+      [{ text: "с Ефремкино", callback_data: "s_Yefremkino" }],
+      [{ text: "п Жемчужный", callback_data: "p_Zhemchuzhnyy" }],
+      [{ text: "с Сон", callback_data: "s_Son" }],
+      [{ text: "с Соленоозерное", callback_data: "s_Solenoozernoye" }],
+      [{ text: "аал Малый Спирин", callback_data: "aal_Malyy_Spirin" }],
+      [{ text: "с Фыркал", callback_data: "s_Fyrkal" }],
+      [{ text: "с Целинное", callback_data: "s_Tselinnoye" }],
+      [{ text: "с Черное Озеро", callback_data: "s_Chernoye_Ozero" }],
+    ],
+  },
+};
 
 const city_area = {
   reply_markup: {
