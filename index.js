@@ -613,7 +613,6 @@ bot.action("post", async (ctx) => {
       subsidy(S, rs, Dmax, jkh, ctx, info);
     }
   }
-  // console.log(pm);
 });
 
 bot.launch();
