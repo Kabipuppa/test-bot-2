@@ -29,12 +29,12 @@ const municipal_area = {
     inline_keyboard: [
       [{ text: "Алтайский", callback_data: "al" }],
       [{ text: "Аскизский", callback_data: "as" }],
-      // [{ text: "Бейский", callback_data: "be" }],
-      // [{ text: "Боградский", callback_data: "bo" }],
-      // [{ text: "Орджоникидзевский", callback_data: "or" }],
-      // [{ text: "Таштыпский", callback_data: "ta" }],
-      // [{ text: "Усть-Абаканский", callback_data: "ya" }],
-      // [{ text: "Ширинский", callback_data: "sr" }],
+      [{ text: "Бейский", callback_data: "bei" }],
+      // [{ text: "Боградский", callback_data: "bog" }],
+      // [{ text: "Орджоникидзевский", callback_data: "ord" }],
+      // [{ text: "Таштыпский", callback_data: "tash" }],
+      // [{ text: "Усть-Абаканский", callback_data: "ust" }],
+      // [{ text: "Ширинский", callback_data: "srir" }],
     ],
   },
 };
@@ -75,6 +75,73 @@ const as_area = {
     ],
   },
 };
+
+const bei_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "с Бея", callback_data: "s_Beya" }],
+      [{ text: "с Большой Монок", callback_data: "s_Monok" }],
+      [{ text: "с Бондарево", callback_data: "s_Bondarevo" }],
+      [{ text: "с Кирба", callback_data: "s_Kirba" }],
+      [{ text: "с Куйбышево", callback_data: "s_Kuybyshevo" }],
+      [{ text: "с Новоенисейка", callback_data: "s_Novoyeniseyka" }],
+      [{ text: "с Сабинка", callback_data: "s_Sabinka" }],
+      [{ text: "с Табат", callback_data: "s_Tabat" }],
+    ],
+  },
+};
+
+const bog_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "с Троицкое", callback_data: "s_Troitskoye" }],
+      [{ text: "с Боград", callback_data: "s_Bograd" }],
+      [{ text: "с Большая Ерба", callback_data: "s_Erba" }],
+      [{ text: "с Бородино", callback_data: "s_Borodino" }],
+      [{ text: "с Знаменка", callback_data: "s_Znamenka" }],
+      [{ text: "с Первомайское", callback_data: "s_Pervomayskoye" }],
+      [{ text: "с Пушное", callback_data: "s_Pushnoye" }],
+      [{ text: "с Сарагаш", callback_data: "s_Saragash" }],
+      [{ text: "с Советская Хакасия", callback_data: "s_Sovetskaya" }],
+      [{ text: "с Сонское", callback_data: "s_Sonskoye" }],
+    ],
+  },
+};
+
+const ord_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "п Копьево", callback_data: "p_Kopevo" }],
+      [{ text: "п Гайдаровск", callback_data: "p_Gaydarovsk" }],
+      [{ text: "с Копьево", callback_data: "s_Kopevo" }],
+      [{ text: "с Июс", callback_data: "s_Iyus" }],
+      [{ text: "с Новомарьясово", callback_data: "s_Novomaryasovo" }],
+      [{ text: "с Орджоникидзевское", callback_data: "s_Ordzhonikidzevskoye" }],
+      [{ text: "с Приисковое", callback_data: "s_Priiskovoye" }],
+      [{ text: "с Сарала", callback_data: "s_Sarala" }],
+      [{ text: "с Устинкино", callback_data: "s_Ustinkino" }],
+    ],
+  },
+};
+
+const tash_area = {
+  reply_markup: {
+    inline_keyboard: [
+      [{ text: "с Анчул", callback_data: "s_Anchul" }],
+      [{ text: "с Арбаты", callback_data: "s_Arbaty" }],
+      [{ text: "с Большая Сея", callback_data: "s_Seya" }],
+      [{ text: "д Бутрахты", callback_data: "d_Butrakhtyo" }],
+      [{ text: "с Имек", callback_data: "s_Imek" }],
+      [{ text: "с Матур", callback_data: "s_Matur" }],
+      [{ text: "с Нижние Сиры", callback_data: "s_Nizhniye_Siry" }],
+      [{ text: "с Таштып", callback_data: "s_Tashtyp" }],
+    ],
+  },
+};
+
+const ust_area = {};
+
+const shir_area = {};
 
 const city_area = {
   reply_markup: {
@@ -123,6 +190,12 @@ module.exports = {
   city_area,
   al_area,
   as_area,
+  bei_area,
+  bog_area,
+  ord_area,
+  tash_area,
+  ust_area,
+  shir_area,
   num_benefit,
   num_season,
   post_btn,

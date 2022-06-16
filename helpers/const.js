@@ -1,3 +1,9 @@
+const pm_work = 13286;
+
+const pm_old = 10483;
+
+const pm_kid = 12822;
+
 const city_id = {
   Abakan: "95701000",
   Abaza: "95702000",
@@ -72,6 +78,138 @@ const as_name = {
   Ust_Chul: "с Усть-Чуль",
 };
 
+const bei_id = {
+  s_Beya: "95612405",
+  s_Monok: "95612410",
+  s_Bondarevo: "95612415",
+  s_Kirba: "95612425",
+  s_Kuybyshevo: "95612430",
+  s_Novoyeniseyka: "95612440",
+  s_Sabinka: "95612455",
+  s_Tabat: "95612460",
+};
+
+const bei_name = {
+  s_Beya: "с Бея",
+  s_Monok: "с Большой Монок",
+  s_Bondarevo: "с Бондарево",
+  s_Kirba: "с Кирба",
+  s_Kuybyshevo: "с Куйбышево",
+  s_Novoyeniseyka: "с Новоенисейка",
+  s_Sabinka: "с Сабинка",
+  s_Tabat: "с Табат",
+};
+
+const bog_id = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const bog_name = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const ord_id = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const ord_name = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const tash_id = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const tash_name = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const ust_id = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const ust_name = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const shir_id = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
+const shir_name = {
+  s_Beya: "",
+  s_Monok: "",
+  s_Bondarevo: "",
+  s_Kirba: "",
+  s_Kuybyshevo: "",
+  s_Novoyeniseyka: "",
+  s_Sabinka: "",
+  s_Tabat: "",
+};
+
 const season_id = {
   hot_period: "В отопительный период",
   cold_period: "Вне отопительного периода",
@@ -92,12 +230,27 @@ const standard_id = {
 };
 
 module.exports = {
+  pm_work,
+  pm_old,
+  pm_kid,
   city_id,
   city_name,
   al_id,
   al_name,
   as_id,
   as_name,
+  bei_id,
+  bei_name,
+  bog_id,
+  bog_name,
+  ord_id,
+  ord_name,
+  tash_id,
+  tash_name,
+  ust_id,
+  ust_name,
+  shir_id,
+  shir_name,
   season_id,
   season_name,
   standard_id,

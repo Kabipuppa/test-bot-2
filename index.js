@@ -4,12 +4,27 @@ const util = require("util");
 const { search } = require("./helpers/api");
 const axios = require("axios");
 const {
+  pm_work,
+  pm_old,
+  pm_kid,
   city_id,
   city_name,
   al_id,
   al_name,
   as_id,
   as_name,
+  bei_id,
+  bei_name,
+  bog_id,
+  bog_name,
+  ord_id,
+  ord_name,
+  tash_id,
+  tash_name,
+  ust_id,
+  ust_name,
+  shir_id,
+  shir_name,
   season_id,
   season_name,
   standard_id,
@@ -22,6 +37,12 @@ const {
   city_area,
   al_area,
   as_area,
+  bei_area,
+  bog_area,
+  ord_area,
+  tash_area,
+  ust_area,
+  shir_area,
   num_benefit,
   num_season,
   post_btn,
@@ -54,6 +75,12 @@ let oktomo_code = {};
 let selected_city = {};
 let selected_al = {};
 let selected_as = {};
+let selected_bei = {};
+let selected_bog = {};
+let selected_ord = {};
+let selected_tash = {};
+let selected_ust = {};
+let selected_shir = {};
 let selected_people = {};
 let selected_work = {};
 let selected_old = {};
@@ -70,6 +97,12 @@ bot.start((ctx) => {
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_as[ctx.chat.id] = null;
+  selected_bei[ctx.chat.id] = null;
+  selected_bog[ctx.chat.id] = null;
+  selected_ord[ctx.chat.id] = null;
+  selected_tash[ctx.chat.id] = null;
+  selected_ust[ctx.chat.id] = null;
+  selected_shir[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
   selected_work[ctx.chat.id] = null;
   selected_old[ctx.chat.id] = null;
@@ -89,6 +122,12 @@ bot.hears("В начало", (ctx) => {
   selected_city[ctx.chat.id] = null;
   selected_al[ctx.chat.id] = null;
   selected_as[ctx.chat.id] = null;
+  selected_bei[ctx.chat.id] = null;
+  selected_bog[ctx.chat.id] = null;
+  selected_ord[ctx.chat.id] = null;
+  selected_tash[ctx.chat.id] = null;
+  selected_ust[ctx.chat.id] = null;
+  selected_shir[ctx.chat.id] = null;
   selected_people[ctx.chat.id] = null;
   selected_work[ctx.chat.id] = null;
   selected_old[ctx.chat.id] = null;
@@ -111,7 +150,6 @@ bot.hears("Муниципальный район", (ctx) => {
   ctx.reply(select_municipal, municipal_area);
 });
 
-// обработка выбранной кнопки 'Алтайский'
 bot.action("al", async (ctx) => {
   ctx.deleteMessage();
   ctx.reply(nasel_punct, al_area);
@@ -132,13 +170,11 @@ Object.keys(al_id).forEach((al) => {
         cancel_btn
       );
       await ctx.reply(select_people);
-      // console.log("Насел.пункт: ", selected_al);
       step[ctx.chat.id] = 1;
     }
   });
 });
 
-// обработка выбранной кнопки 'Аскизский'
 bot.action("as", (ctx) => {
   ctx.deleteMessage();
   ctx.reply(nasel_punct, as_area);
@@ -148,7 +184,6 @@ Object.keys(as_id).forEach((as) => {
   bot.action(as, async (ctx) => {
     selected_as[ctx.chat.id] = as_id[as];
     oktomo_code = selected_as[ctx.chat.id];
-    // console.log("октомо: ", oktomo_code);
     if (isNaN(selected_as[ctx.chat.id]) === true) {
       ctx.reply("Выберете город", {
         parse_mode: "html",
@@ -160,7 +195,31 @@ Object.keys(as_id).forEach((as) => {
         cancel_btn
       );
       await ctx.reply(select_people);
-      // console.log("Насел пункт: ", selected_as);
+      step[ctx.chat.id] = 1;
+    }
+  });
+});
+
+bot.action("bei", async (ctx) => {
+  ctx.deleteMessage();
+  ctx.reply(nasel_punct, bei_area);
+});
+
+Object.keys(bei_id).forEach((bei) => {
+  bot.action(bei, async (ctx) => {
+    ctx.deleteMessage();
+    selected_bei[ctx.chat.id] = bei_id[bei];
+    oktomo_code = selected_bei[ctx.chat.id];
+    if (isNaN(selected_bei[ctx.chat.id]) === true) {
+      ctx.reply("Выберете населенный пункт", {
+        parse_mode: "html",
+      });
+    } else {
+      await ctx.reply(
+        `Вы выбрали населенный пункт: ${bei_name[bei]}`,
+        cancel_btn
+      );
+      await ctx.reply(select_people);
       step[ctx.chat.id] = 1;
     }
   });
@@ -182,7 +241,6 @@ Object.keys(city_id).forEach((city) => {
       ctx.deleteMessage();
       await ctx.reply(`Вы выбрали город: ${city_name[city]}`, cancel_btn);
       await ctx.reply(select_people);
-      // console.log("город: ", selected_city);
       step[ctx.chat.id] = 1;
     }
   });
@@ -196,7 +254,6 @@ bot.hears("Да", (ctx) => {
 
 bot.hears("Нет", async (ctx) => {
   selected_benefit[ctx.chat.id] = 0;
-  // console.log("льгота: ", selected_benefit);
   await ctx.reply(select_season, cancel_btn);
   await ctx.reply("Нажмите 👇", num_season);
 });
@@ -213,7 +270,6 @@ bot.on("text", (ctx) => {
       });
       return (step[ctx.chat.id] = 1);
     } else {
-      // console.log("люди:", selected_people);
       ctx.reply(select_work);
       step[ctx.chat.id] = 2;
     }
@@ -228,7 +284,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 2;
     } else {
-      // console.log("работяги:", selected_work);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -253,7 +308,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 3;
     } else {
-      // console.log("старики:", selected_old);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -278,7 +332,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 4;
     } else {
-      // console.log("дети:", selected_old);
       step[ctx.chat.id] = state(
         selected_people[ctx.chat.id],
         selected_work[ctx.chat.id],
@@ -303,7 +356,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 5;
     } else {
-      // console.log("зп:", selected_salary);
       ctx.reply(select_jkh);
       step[ctx.chat.id] = 6;
     }
@@ -318,7 +370,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 6;
     } else {
-      // console.log("жкх:", selected_jkh);
       ctx.reply(select_electric);
       step[ctx.chat.id] = 7;
     }
@@ -333,7 +384,6 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 7;
     } else {
-      // console.log("электричество':", selected_electric);
       ctx.reply(select_benefit, num_benefit);
     }
   } else if (step[ctx.chat.id] === 8) {
@@ -347,13 +397,11 @@ bot.on("text", (ctx) => {
       });
       step[ctx.chat.id] = 8;
     } else {
-      // console.log("размер льготы:", selected_benefit);
       ctx.reply(select_season, num_season);
     }
   }
 });
 
-// запомнить значение 'Период'
 Object.keys(season_id).forEach((season) => {
   bot.action(season, async (ctx) => {
     ctx.deleteMessage();
@@ -363,7 +411,6 @@ Object.keys(season_id).forEach((season) => {
       selected_season[ctx.chat.id] = season_id[season];
       await ctx.reply(`Вы выбрали период: ${season_name[season]}`, cancel_btn);
       await ctx.reply(pls_wait, { parse_mode: "HTML" });
-      // console.log(selected_season);
 
       if (selected_people[ctx.chat.id] > 5) {
         selected_people[ctx.chat.id] = 5;
@@ -393,7 +440,6 @@ Object.keys(season_id).forEach((season) => {
   });
 });
 
-// запомнить значение 'Стандарт'
 Object.keys(standard_id).forEach((standard) => {
   bot.action(standard, async (ctx) => {
     ctx.deleteMessage();
@@ -402,7 +448,6 @@ Object.keys(standard_id).forEach((standard) => {
     } else {
       selected_standard[ctx.chat.id] = standard_id[standard];
       await ctx.reply("Нажмите 👇", post_btn);
-      // console.log(selected_standard);
     }
   });
 });
@@ -422,13 +467,13 @@ bot.action("post", async (ctx) => {
     let S = {};
 
     rs = get_data.value * selected_people[ctx.chat.id]; // Регион стандарт
-    sd = selected_salary[ctx.chat.id] / 6; // совоокупный доход семьи
-    pm = // прожиточный минимум
-      selected_work[ctx.chat.id] * 13026 +
-      selected_old[ctx.chat.id] * 10277 +
-      selected_kid[ctx.chat.id] * 11592;
+    sd = selected_salary[ctx.chat.id] / 6; // Совоокупный доход семьи
+    pm = // Прожиточный минимум
+      selected_work[ctx.chat.id] * pm_work +
+      selected_old[ctx.chat.id] * pm_old +
+      selected_kid[ctx.chat.id] * pm_kid;
     pm_sr = pm / selected_people[ctx.chat.id];
-    jkh = // жкх сумма
+    jkh = // ЖКХ сумма
       selected_jkh[ctx.chat.id] +
       selected_electric[ctx.chat.id] -
       selected_benefit[ctx.chat.id];
@@ -440,16 +485,8 @@ bot.action("post", async (ctx) => {
       Dmax = (sd / pm_sr) * 0.1 * sd;
       subsidy(S, rs, Dmax, jkh, ctx, info);
     }
-    console.log("стандарт: ", get_data.value);
-    console.log("Критерий: ", get_data.diffCriteria);
-    // console.log("Регион стандарт: ", rs);
-    // console.log("Совокупный доход:", sd);
-    // console.log("Прожиточный минимум:", pm);
-    // console.log("Прожиточный минимум средний:", pm_sr);
-    // console.log("ЖКХ:", jkh);
-    // console.log("Дmax", Dmax);
-    // console.log("Субсидия", S);
   }
+  console.log(pm);
 });
 
 bot.launch();
